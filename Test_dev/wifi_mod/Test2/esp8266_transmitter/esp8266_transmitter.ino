@@ -45,16 +45,22 @@ void setup() {
 }
 
 void loop() {
+  /*
   if(digitalRead(btn0) == LOW) sensorValue0 = 1;
   if(digitalRead(btn1) == LOW) sensorValue1 = 1;
   if(digitalRead(btn2) == LOW) sensorValue2 = 1;
   if(digitalRead(btn3) == LOW) sensorValue3 = 1;
 
   if(digitalRead(btn0) == HIGH) sensorValue0 = 0;
-  if(digitalRead(btn1) == HIGH) sensorValue1 = 0;
+  if(digitalRead(btn1) == HIGH) sensorValue1 = 1;
   if(digitalRead(btn2) == HIGH) sensorValue2 = 0;
   if(digitalRead(btn3) == HIGH) sensorValue3 = 0;
-
+  */
+  
+  sensorValue0 = 1;
+  sensorValue1 = 5;
+  sensorValue2 = 4;
+  sensorValue3 = 0;
 
   // Use WiFiClient class to create TCP connections
   WiFiClient client;
@@ -69,7 +75,7 @@ void loop() {
   // We now create a URI for the request. Something like /data/?sensor_reading=123
   String url = "/data/";
   url += "?sensor_reading=";
-  url +=  "{\"sensor0_reading\":\"sensor0_value\",\"sensor1_reading\":\"sensor1_value\",\"sensor2_reading\":\"sensor2_value\",\"sensor3_reading\":\"sensor3_value\"}";
+  url +=  "{\"sensor0_dula\":\"sensor0_value\",\"sensor1_reading\":\"sensor1_value\",\"sensor2_reading\":\"sensor2_value\",\"sensor3_reading\":\"sensor3_value\"}";
 
   url.replace("sensor0_value", String(sensorValue0));
   url.replace("sensor1_value", String(sensorValue1));
@@ -82,7 +88,7 @@ void loop() {
   unsigned long timeout = millis();
   
   while (client.available() == 0) {
-    if (millis() - timeout > 5000) {
+    if (millis() - timeout > 10000) {
       Serial.println(">>> Client Timeout !");
       client.stop();
       return;

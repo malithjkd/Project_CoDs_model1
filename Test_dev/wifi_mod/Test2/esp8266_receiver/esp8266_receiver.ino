@@ -38,18 +38,18 @@ void handleSentVar() {
     Serial.println(sensor_values);
   }
   JsonObject& root = jsonBuffer.parseObject(sensor_values);
-//  if (!root.success()) {
-//    Serial.println("parseObject() failed");
-//    return;
-//  }
-//  if (root.success())
-//  {
+  if (!root.success()) {//
+    Serial.println("parseObject() failed");//
+    return;//
+  }//
+  if (root.success())//
+  {//
     sensorValue0          = root["sensor0_reading"].as<int>();
     sensorValue1          = root["sensor1_reading"].as<int>();
     sensorValue2          = root["sensor2_reading"].as<int>();
     sensorValue3          = root["sensor3_reading"].as<int>();
 
-//  }
+  }//
 
   Serial.println(sensorValue0);
   Serial.println(sensorValue1);
