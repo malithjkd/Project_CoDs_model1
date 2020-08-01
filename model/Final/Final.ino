@@ -4,8 +4,11 @@ Device: 6 wire stepper and L298
       : Relay module
       : single bulbs
 Malithjkd
-21.07.2020
+01.08.2020
+0723434780
+chathu1991
 */
+
 
 #include <Stepper.h>
 const int stepsPerRevolution = 200;
@@ -13,13 +16,16 @@ Stepper myStepper(stepsPerRevolution, 8, 9, 10, 11);
 
 int stepCount = 0;         // number of steps the motor has taken
 
-int Relay_module_input_1 = 52;
-int Relay_module_input_2 = 50;
-int Relay_module_input_3 = 48;
-int Relay_module_input_4 = 46;
+int process12 = 52;
+int process09 = 48;
+int process10 = 49;
+int process15 = 53;
+int process03 = 44;
 
-
-
+int Relay_module_input_1 = 45;
+int Relay_module_input_2 = 41;
+int Relay_module_input_3 = 37;
+int Relay_module_input_4 = 33;
 
 
 void setup() {
@@ -32,6 +38,21 @@ void setup() {
   pinMode(Relay_module_input_2, OUTPUT);
   pinMode(Relay_module_input_3, OUTPUT);
   pinMode(Relay_module_input_4, OUTPUT);
+  pinMode(process12, OUTPUT);
+  pinMode(process09, OUTPUT);
+  pinMode(process15, OUTPUT);
+  pinMode(process10, OUTPUT);
+  pinMode(process03, OUTPUT);
+
+  digitalWrite(process12, LOW);
+  digitalWrite(process09, LOW);
+  digitalWrite(process10, LOW);
+  digitalWrite(process15, LOW);
+  
+  digitalWrite(Relay_module_input_1, HIGH);
+  digitalWrite(Relay_module_input_2, HIGH); 
+  digitalWrite(Relay_module_input_3, HIGH);
+  digitalWrite(Relay_module_input_4, HIGH);
 }
 
 void loop() {
@@ -41,4 +62,9 @@ void loop() {
   Serial.println(stepCount);
   stepCount++;
   delay(1000);
+
+  //digitalWrite(Relay_module_input_4, HIGH);
+  //delay(1000);
+  //digitalWrite(Relay_module_input_4, LOW);
+  //delay(1000);
 }
