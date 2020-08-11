@@ -59,8 +59,12 @@ void setup() {
   digitalWrite(GeneralLights, HIGH);
   digitalWrite(process07, HIGH); 
   digitalWrite(process05, HIGH);
-  digitalWrite(BlueLight, LOW);
+  digitalWrite(BlueLight, HIGH);
 
+  delay(5000);
+  digitalWrite(BlueLight, LOW);
+  delay(3000);
+  digitalWrite(GeneralLights, HIGH);
   delay(1000);
   digitalWrite(GeneralLights, LOW);
   delay(3000);
@@ -104,10 +108,5 @@ void loop() {
   Serial.println(stepCount);
   stepCount++;
   delay(800);
-
-  //digitalWrite(Relay_module_input_4, HIGH);
-  //delay(1000);
-  //digitalWrite(Relay_module_input_4, LOW);
-  //delay(1000);
   
 }
