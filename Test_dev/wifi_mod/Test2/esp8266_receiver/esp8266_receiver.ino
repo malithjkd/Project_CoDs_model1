@@ -72,7 +72,7 @@ void setup() {
   pinMode(led2, OUTPUT);
   pinMode(led3, OUTPUT);
   
-  //toggle_leds();                 //turn off all leds as all the sensor values are zero
+  //toggle_leds();                              //turn off all leds as all the sensor values are zero
   
   server.on("/data/", HTTP_GET, handleSentVar); // when the server receives a request with /data/ in the string then run the handleSentVar function
   server.begin();
