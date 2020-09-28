@@ -9,6 +9,7 @@ int i = 0;
 int j = 0;
 int k = 0;
 int l = 0;
+int m = 0;
 
 int relay1 = 22;
 int relay2 = 23;
@@ -23,8 +24,8 @@ int relay_delay = 1500;
 
 void setup() {
     pinMode(LED_BUILTIN, OUTPUT);
-    pinMode(relay1, OUTPUT);
-    pinMode(relay2, OUTPUT);
+    pinMode(relay1, OUTPUT);    // precess 2
+    pinMode(relay2, OUTPUT);    // precess 3
     pinMode(relay3, OUTPUT);
     pinMode(relay4, OUTPUT);
     pinMode(relay5, OUTPUT);
@@ -41,20 +42,19 @@ void setup() {
     digitalWrite(relay8, HIGH);
 
     FastLED.addLeds<WS2812B, 2, RGB>(leds[0], NUM_LEDS);  // precess 1
-    FastLED.addLeds<WS2812B, 3, RGB>(leds[1], NUM_LEDS);  // Process 4
-    FastLED.addLeds<WS2812B, 4, RGB>(leds[2], NUM_LEDS);  // process 4
-    FastLED.addLeds<WS2812B, 5, RGB>(leds[3], NUM_LEDS);  // process 4
-    FastLED.addLeds<WS2812B, 6, RGB>(leds[4], NUM_LEDS);  // process 4
+    FastLED.addLeds<WS2812B, 3, RGB>(leds[1], NUM_LEDS);  // Process 4  // precess 5
+    FastLED.addLeds<WS2812B, 4, RGB>(leds[2], NUM_LEDS);  // process 4  
+    FastLED.addLeds<WS2812B, 5, RGB>(leds[3], NUM_LEDS);  // process 4  // precess 5
+    FastLED.addLeds<WS2812B, 6, RGB>(leds[4], NUM_LEDS);  // process 4  // precess 5
     FastLED.addLeds<WS2812B, 7, RGB>(leds[5], NUM_LEDS);  // process 11
-    FastLED.addLeds<WS2812B, 8, RGB>(leds[6], NUM_LEDS);  // process 6 // process 7
-    FastLED.addLeds<WS2812B, 9, RGB>(leds[7], NUM_LEDS);  // process 5 // process 11
-    FastLED.addLeds<WS2812B, 10, RGB>(leds[8], NUM_LEDS); // process 6 // process 7
-    FastLED.addLeds<WS2812B, 11, RGB>(leds[9], NUM_LEDS); // process 6 // process 7
-
+    FastLED.addLeds<WS2812B, 8, RGB>(leds[6], NUM_LEDS);                             // process 6  // process 7
+    FastLED.addLeds<WS2812B, 9, RGB>(leds[7], NUM_LEDS);                // process 5 // process 11
+    FastLED.addLeds<WS2812B, 10, RGB>(leds[8], NUM_LEDS);                            // process 6  // process 7
+    FastLED.addLeds<WS2812B, 11, RGB>(leds[9], NUM_LEDS);                            // process 6  // process 7
 }
 
 void loop() {
-
+/*
     // Process 1----------------------------
     for(i=0;i<37;i++)
     {
@@ -147,22 +147,72 @@ void loop() {
     }
     
     
-
-    // Process 6----------------------------
-    for(i=0;i<5;i++)
+*/
+    // Process 6---------------------------- 
+    //swiching on 
+    j=0;
+    k=0;
+    l=0;
+    for(i=0;i<23;i++)
     {
         leds[6][i] = CRGB(10,99,97);  // Green,RED,BLUE
-        leds[8][i] = CRGB(10,99,97);  // Green,RED,BLUE
-        leds[9][i] = CRGB(10,99,97);  // Green,RED,BLUE
+        leds[8][k] = CRGB(10,99,97);  // Green,RED,BLUE
+        leds[9][m] = CRGB(10,99,97);  // Green,RED,BLUE
         FastLED.show();
-        delay(50);
-        leds[6][i-1] = CRGB(0,0,0);  // Green,RED,BLUE
-        leds[8][i-1] = CRGB(0,0,0);  // Green,RED,BLUE
-        leds[9][i-1] = CRGB(0,0,0);  // Green,RED,BLUE
+        delay(50); 
+        //to limit the no of lights illuminating in the line
+        if(j==20)
+        {
+            j=0;
+        }else
+        {
+            j++;  
+        }
+        k=j/7;
+
+        if(l==20)
+        {
+            l=0;
+        }else
+        {
+            l++;  
+        }
+        m=l/4;
+        
+    }
+    //swiching off
+    j=0;
+    k=0;
+    l=0;
+    for(i=0;i<23;i++)
+    {
+        leds[6][i] = CRGB(0,0,0);  // Green,RED,BLUE
+        leds[8][k] = CRGB(0,0,0);  // Green,RED,BLUE
+        leds[9][m] = CRGB(0,0,0);  // Green,RED,BLUE
         FastLED.show();
-        delay(10);  
+        delay(50);  
+        
+        //to limit the no of lights illuminating in the line
+        if(j==20)
+        {
+            j=0;
+        }else
+        {
+            j++;  
+        }
+        k=j/7;
+
+        if(l==20)
+        {
+            l=0;
+        }else
+        {
+            l++;  
+        }
+        m=l/4;
     }
 
+/*
     // Process 7----------------------------round tank
 
     // Process 11----------------------------
@@ -186,5 +236,7 @@ void loop() {
     delay(relay_delay);
     digitalWrite(relay4, HIGH);
     delay(relay_delay);
+
+    */
 }
     
