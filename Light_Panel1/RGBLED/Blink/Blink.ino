@@ -1,8 +1,6 @@
 #include <FastLED.h>
 
-// How many leds in your strip?
-
-#define NUM_STRIPS 8
+#define NUM_STRIPS 8 //no of led strips
 #define NUM_LEDS 106
 #define CLOCK_PIN 13
 
@@ -28,20 +26,18 @@ void loop() {
 
 
     // Process 6
-    for(i=0;i<20;i++)
+    for(i=0;i<19;i++)
     {
         leds[0][i] = CRGB(10,99,97);  // Green,RED,BLUE
         FastLED.show();
-        delay(50);
-        leds[0][i-1] = CRGB(0,0,0);  // Green,RED,BLUE
-        FastLED.show();
-        delay(10);  
+        delay(50);  
     }
-    leds[0][19] = CRGB(0,0,0);  // Green,RED,BLUE
-    FastLED.show();
-    delay(10);  
-    delay(1500);
-
+    for(i=0;i<19;i++)
+    {
+        leds[0][i] = CRGB(0,0,0);  // Green,RED,BLUE
+        FastLED.show();
+        delay(50);  
+    }
     //process 7
 
     for(j=0;j<1;j++){
