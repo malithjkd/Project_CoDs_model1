@@ -18,6 +18,9 @@ int x = 0;
 
 int process6();
 int process7();
+int process8();
+int process9();
+int process10();
 
 void setup() {
 
@@ -78,7 +81,7 @@ void loop()
         digitalWrite(slaveReady, LOW);
         Serial.println("inside process 3");
         Serial.println(x);
-        delay(4000);
+        process8();
         digitalWrite(slaveReady, HIGH);
         delay(30);
     }else if(x ==4)
@@ -86,7 +89,7 @@ void loop()
         digitalWrite(slaveReady, LOW);
         Serial.println("inside process 4");
         Serial.println(x);
-        delay(1000);
+        process9();
         digitalWrite(slaveReady, HIGH);
         delay(10);
     }else if(x == 5)
@@ -238,4 +241,67 @@ int process7()
     leds[0][41] = CRGB(0,0,0);
     FastLED.show();
     delay(15);
+}
+
+//prcess 8
+
+int process8()
+{
+    j=0;
+    leds[2][7] = CRGB(10,10,100);  // Green,RED,BLUE
+    leds[5][3] = CRGB(10,10,100);
+    leds[5][4] = CRGB(10,10,100);
+    for(i=12;i>0;i--)
+    {
+        
+        leds[2][i] = CRGB(10,10,100);  // Green,RED,BLUE
+        leds[5][j] = CRGB(10,10,100);  // Green,RED,BLUE
+        if(j==9)
+        {
+            leds[1][0] = CRGB(10,10,100);  // Green,RED,BLUE
+        }else if(j==10)
+        {
+           leds[2][0] = CRGB(10,10,100);
+        }
+        
+        FastLED.show();
+        delay(45);
+
+        leds[2][i+1] = CRGB(0,0,0);  // Green,RED,BLUE
+        leds[5][j-1] = CRGB(0,0,0);  // Green,RED,BLUE
+        if(j==10)
+        {
+            leds[1][0] = CRGB(0,0,0);  // Green,RED,BLUE
+        }else if(j==11)
+        {
+            leds[2][0] = CRGB(0,0,0);
+        }
+        FastLED.show();
+        delay(45);
+        j++;
+    }
+    delay(145);
+    leds[2][1] = CRGB(0,0,0);
+    FastLED.show();
+}
+
+
+int process9()
+{
+    for(i=0;i<12;i++)
+    {
+        leds[3][i] = CRGB(10,10,100);  // Green,RED,BLUE
+        delay(15);
+
+    }
+    FastLED.show();
+    delay(3000);
+    
+    for(i=0;i<12;i++)
+    {
+        leds[3][i] = CRGB(0,0,0);  // Green,RED,BLUE
+        delay(10);
+    }
+    FastLED.show();
+  
 }
