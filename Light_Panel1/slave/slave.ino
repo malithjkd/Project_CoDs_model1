@@ -81,7 +81,11 @@ void loop()
         digitalWrite(slaveReady, LOW);
         Serial.println("inside process 3");
         Serial.println(x);
-        process8();
+        if(reset == 0)
+        {
+            reset = 1;
+            process8();  
+        }
         digitalWrite(slaveReady, HIGH);
         delay(30);
     }else if(x ==4)
@@ -89,7 +93,11 @@ void loop()
         digitalWrite(slaveReady, LOW);
         Serial.println("inside process 4");
         Serial.println(x);
-        process9();
+        if(reset == 0)
+        {
+            reset = 1;
+            process9();
+        }
         digitalWrite(slaveReady, HIGH);
         delay(10);
     }else if(x == 5)
