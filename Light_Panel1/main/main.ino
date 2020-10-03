@@ -19,6 +19,7 @@ int process6();
 int process7();
 int process8();
 int process9();
+int process10();
 
 // velriable diclaration for led 
 CRGB leds[NUM_STRIPS][NUM_LEDS];
@@ -124,6 +125,7 @@ void loop(){
     Wire.beginTransmission(9);    // sending value to arduino 2
     Wire.write(0);                // sending value to arduino 2
     Wire.endTransmission();       // sending value to arduino 2
+    process10();
     delay(100);
     
 
