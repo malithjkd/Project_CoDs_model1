@@ -125,7 +125,11 @@ void loop(){
     Wire.beginTransmission(9);    // sending value to arduino 2
     Wire.write(0);                // sending value to arduino 2
     Wire.endTransmission();       // sending value to arduino 2
+    delay(100);
     process10();
+    Wire.beginTransmission(9);    // sending value to arduino 2
+    Wire.write(0);                // sending value to arduino 2
+    Wire.endTransmission();       // sending value to arduino 2
     delay(100);
     
 
@@ -537,7 +541,7 @@ int process10()
     Wire.write(5);                // sending value to arduino 2
     Wire.endTransmission();       // sending value to arduino 2
     delay(50);
-    for(i=0;i<90;i++)
+    for(i=0;i<160;i++)
     {
         slaveStatus = digitalRead(slaveReady);
         Serial.println(slaveStatus);

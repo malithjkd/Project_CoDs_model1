@@ -107,6 +107,7 @@ void loop()
         Serial.println(x);
         if(reset == 0)
         {
+            reset = 1;
             process10();      
         }
         digitalWrite(slaveReady, HIGH);
@@ -318,12 +319,12 @@ int process9()      // pump house clean water
 }
 
 
-// process 10
+// process 10----------------------------------------------
 int process10()
 { 
     for(i=0;i<106;i++)
     {
-        leds[1][i] = CRGB(80,25,125);  // Green,RED,BLUE
+        leds[1][i] = CRGB(80,25,125);  // Green,RED,BLUE 1
         FastLED.show();
         delay(15);
 
