@@ -168,7 +168,7 @@ int process3()
     Serial.println("Process 3 finished");
   
 }
-
+// process 4----------------------------------------------
 int process4()
 {
     for(i=0;i<5;i++)
@@ -208,6 +208,7 @@ int process4()
     delay(10);
 }
 
+// process 5----------------------------------------------
 int process5()
 {
     Serial.println("Process 5 starts");
@@ -235,6 +236,7 @@ int process5()
     Serial.println("Process 5 ends");
 }
 
+// process 6----------------------------------------------
 int process6()
 {
     Serial.println("process6 starts");
@@ -313,7 +315,7 @@ int process6()
 }   
 //  end of process 6
 
-
+// process 7----------------------------------------------
 int process7()
 {
     Serial.println("Process 7 starts");
@@ -481,7 +483,7 @@ int process7()
     }
 } // end of process 7
 
-// process 8
+// process 8------------------------------------------
 int process8()
 {
     Serial.println("Process 8 starts");
@@ -502,7 +504,7 @@ int process8()
     Serial.println("Process 8 ends");
 }
 
-// process 9
+// process 9-------------------------------------------------- pump house for clean water
 int process9()
 {
     Serial.println("Process 9 starts");
@@ -521,4 +523,27 @@ int process9()
         delay(50);
     }
     Serial.println("Process 9 ends");
+}
+
+
+// process 10--------------------------------------------------.
+
+int process10()
+{
+    Serial.println("Process 10 starts");
+    Wire.beginTransmission(9);    // sending value to arduino 2
+    Wire.write(5);                // sending value to arduino 2
+    Wire.endTransmission();       // sending value to arduino 2
+    delay(50);
+    for(i=0;i<90;i++)
+    {
+        slaveStatus = digitalRead(slaveReady);
+        Serial.println(slaveStatus);
+        if (slaveStatus > 0)
+        {
+            break;  
+        }
+        delay(50);
+    }
+    Serial.println("Process 10 ends");
 }
