@@ -88,7 +88,7 @@ void loop()
         }
         digitalWrite(slaveReady, HIGH);
         delay(30);
-    }else if(x ==4)
+    }else if(x == 4)
     {
         digitalWrite(slaveReady, LOW);
         Serial.println("inside process 4");

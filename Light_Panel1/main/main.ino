@@ -114,10 +114,12 @@ void loop(){
     Wire.beginTransmission(9);    // sending value to arduino 2
     Wire.write(0);                // sending value to arduino 2
     Wire.endTransmission();       // sending value to arduino 2
+    delay(100);
     process8();
     Wire.beginTransmission(9);    // sending value to arduino 2
     Wire.write(0);                // sending value to arduino 2
     Wire.endTransmission();       // sending value to arduino 2
+    delay(100);
     process9();
     Wire.beginTransmission(9);    // sending value to arduino 2
     Wire.write(0);                // sending value to arduino 2
