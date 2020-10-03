@@ -105,7 +105,10 @@ void loop()
         digitalWrite(slaveReady, LOW);
         Serial.println("inside process 5");
         Serial.println(x);
-        delay(2000);
+        if(reset == 0)
+        {
+            process10();      
+        }
         digitalWrite(slaveReady, HIGH);
         delay(10);
     }else if(x == 6)
@@ -294,7 +297,7 @@ int process8()
 }
 
 
-int process9()
+int process9()      // pump house clean water
 {
     for(i=0;i<12;i++)
     {
@@ -303,7 +306,7 @@ int process9()
 
     }
     FastLED.show();
-    delay(3000);
+    delay(4000);
     
     for(i=0;i<12;i++)
     {
@@ -312,4 +315,20 @@ int process9()
     }
     FastLED.show();
   
+}
+
+
+// process 10
+int process10()
+{ 
+    for(i=0;i<106;i++)
+    {
+        leds[1][i] = CRGB(80,25,125);  // Green,RED,BLUE
+        FastLED.show();
+        delay(15);
+
+        leds[1][i-1] = CRGB(0,0,0);  // Green,RED,BLUE
+        FastLED.show();
+        delay(10);
+    }
 }
