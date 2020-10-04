@@ -20,7 +20,9 @@ int process6();
 int process7();
 int process8();
 int process9();
-int process10();
+int process10();  // good water out from the pump room
+int process11();  // slug collection from round tank to bulding
+
 
 void setup() {
 
@@ -29,15 +31,17 @@ void setup() {
     Wire.onReceive(receiveEvent);
     Serial.begin(9600);
 
-    FastLED.addLeds<WS2812B, 2, RGB>(leds[0], NUM_LEDS);  // precess 6
-    FastLED.addLeds<WS2812B, 3, RGB>(leds[1], NUM_LEDS);  // Process 7
-    FastLED.addLeds<WS2812B, 4, RGB>(leds[2], NUM_LEDS);  // process 8
-    FastLED.addLeds<WS2812B, 5, RGB>(leds[3], NUM_LEDS);  // process 8
-    FastLED.addLeds<WS2812B, 6, RGB>(leds[4], NUM_LEDS);  // process 14
-    FastLED.addLeds<WS2812B, 7, RGB>(leds[5], NUM_LEDS);  // GRB ordering is typical
-    FastLED.addLeds<WS2812B, 8, RGB>(leds[6], NUM_LEDS);  // GRB ordering is typical
-    FastLED.addLeds<WS2812B, 9, RGB>(leds[7], NUM_LEDS);  // GRB ordering is typical
-
+    FastLED.addLeds<WS2812B, 2, RGB>(leds[0], NUM_LEDS);  // precess 6 & process7 *
+    FastLED.addLeds<WS2812B, 3, RGB>(leds[1], NUM_LEDS);  // Process 1 *
+    FastLED.addLeds<WS2812B, 4, RGB>(leds[2], NUM_LEDS);  // process 8 *
+    FastLED.addLeds<WS2812B, 5, RGB>(leds[3], NUM_LEDS);  // process 9 *
+    FastLED.addLeds<WS2812B, 6, RGB>(leds[4], NUM_LEDS);  // process 14 *
+    FastLED.addLeds<WS2812B, 7, RGB>(leds[5], NUM_LEDS);  // process 8 *
+    FastLED.addLeds<WS2812B, 8, RGB>(leds[6], NUM_LEDS);  // pricess 13 *
+    FastLED.addLeds<WS2812B, 9, RGB>(leds[7], NUM_LEDS);  // ariation line for (==) tank **need to be tested
+    FastLED.addLeds<WS2812B, 10, RGB>(leds[8], NUM_LEDS);  // **need to be tested
+    FastLED.addLeds<WS2812B, 11, RGB>(leds[9], NUM_LEDS);  // **need to be tested
+    
     
 }
 
@@ -47,7 +51,10 @@ void receiveEvent(int bytes) {
 
 void loop() 
 {
-    if(x == 0)
+
+    process11()
+    
+/*    if(x == 0)
     {
         digitalWrite(slaveReady, LOW);            // slave is busy
         reset = 0;
@@ -129,6 +136,8 @@ void loop()
         digitalWrite(slaveReady, HIGH);
         delay(10);
     }
+
+*/
 
 }   //end of loop
 
@@ -332,4 +341,38 @@ int process10()
         FastLED.show();
         delay(10);
     }
+}
+
+int process11()
+{
+    
+}
+
+
+int process13(){
+    // process 13
+    for(i=0;i<31;i++)
+    {
+        leds[6][i] = CRGB(50,50,50);  // Green,RED,BLUE
+        FastLED.show();
+        delay(30);
+        leds[6][i-1] = CRGB(0,0,0);  // Green,RED,BLUE
+        FastLED.show();
+        delay(30);  
+    }
+}
+
+int process14(){
+    // process 14
+    for(i=0;i<69;i++)
+    {
+        leds[4][i] = CRGB(0,125,5);  // Green,RED,BLUE
+        FastLED.show();
+        delay(15);
+
+        leds[4][i-1] = CRGB(0,0,0);  // Green,RED,BLUE
+        FastLED.show();
+        delay(10);
+    }
+
 }
