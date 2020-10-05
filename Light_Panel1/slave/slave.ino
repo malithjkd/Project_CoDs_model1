@@ -21,7 +21,7 @@
 #include <Wire.h>
 #include <FastLED.h>
 
-#define NUM_STRIPS 11 //no of led strips
+#define NUM_STRIPS 12 //no of led strips
 #define NUM_LEDS 106
 #define CLOCK_PIN 13
 
@@ -78,15 +78,15 @@ void receiveEvent(int bytes) {
 
 void loop() 
 {
-    process6();   // process 6 - pipe line: oxidation ditch to sedimantation tank
-    process7();   // process 7 - sedimantation tank
+    //process6();   // process 6 - pipe line: oxidation ditch to sedimantation tank
+    //process7();   // process 7 - sedimantation tank
     process8();   // process 8 - pipe line: sedimentation tank to disinfection building
-    process9();   // process 9 - disinfection building
-    process10();  // process 10 - pipe line: Treated effluent
-    process11();  // process 11 - pipe line: sedimentation tank to slug pump building
-    process13();  // process 13 - pipe line: slug pump building to oxidation tank
-    process14();  // process 14 - pipe line: slug pump building to slug treatment building (red long line -69)
-    process16();  // process 16 - pipe line: slug pump building to oxidation ditch(air line)
+    //process9();   // process 9 - disinfection building
+    //process10();  // process 10 - pipe line: Treated effluent
+    //process11();  // process 11 - pipe line: sedimentation tank to slug pump building
+    //process13();  // process 13 - pipe line: slug pump building to oxidation tank
+    //process14();  // process 14 - pipe line: slug pump building to slug treatment building (red long line -69)
+    //process16();  // process 16 - pipe line: slug pump building to oxidation ditch(air line)
     /*
     if(x == 0)
     {
@@ -301,46 +301,54 @@ int process7()
     delay(15);
 }
 
-//  process 8 - pipe line: sedimentation tank to disinfection building
+//  process 8 - pipe line: sedimentation tank to disinfection building (bulue line)
 
 int process8()
-{
-    j=0;
-    leds[2][7] = CRGB(10,10,100);  // Green,RED,BLUE
-    leds[5][3] = CRGB(10,10,100);
-    leds[5][4] = CRGB(10,10,100);
-    for(i=12;i>0;i--)
+{   
+    j = 0;    //    switching on sequance
+    for(i=12;i>=1;i--)
     {
-        
-        leds[2][i] = CRGB(10,10,100);  // Green,RED,BLUE
-        leds[5][j] = CRGB(10,10,100);  // Green,RED,BLUE
-        if(j==9)
-        {
-            leds[1][0] = CRGB(10,10,100);  // Green,RED,BLUE
-        }else if(j==10)
-        {
-           leds[2][0] = CRGB(10,10,100);
-        }
-        
-        FastLED.show();
-        delay(45);
-
-        leds[2][i+1] = CRGB(0,0,0);  // Green,RED,BLUE
-        leds[5][j-1] = CRGB(0,0,0);  // Green,RED,BLUE
-        if(j==10)
-        {
-            leds[1][0] = CRGB(0,0,0);  // Green,RED,BLUE
-        }else if(j==11)
-        {
-            leds[2][0] = CRGB(0,0,0);
-        }
-        FastLED.show();
-        delay(45);
-        j++;
+          leds[2][i] = CRGB(10,10,100);
+          if(j<=8)
+          {
+              leds[5][j] = CRGB(10,10,100);
+          }else if(j == 9)
+          {
+              leds[1][0] = CRGB(10,10,100);
+          }else if(j == 10)
+          {
+              leds[2][0] = CRGB(10,10,100);
+          }
+          FastLED.show();
+          delay(75);
+          j++;
+          
+          
     }
-    delay(145);
-    leds[2][1] = CRGB(0,0,0);
-    FastLED.show();
+    delay(800);
+    
+    j = 0;    // swiching off sequance
+    for(i=12;i>=1;i--)
+    {
+          leds[2][i] = CRGB(0,0,0);
+          if(j <= 8)
+          {
+              leds[5][j] = CRGB(0,0,0);
+          }else if(j == 9)
+          {
+              leds[1][0] = CRGB(0,0,0);
+          }else if(j == 10)
+          {
+              leds[2][0] = CRGB(0,0,0);
+          }
+          FastLED.show();
+          delay(75);
+          j++;
+    }
+
+    
+  
+   
 }
 
 //  process 9 - disinfection building
@@ -387,10 +395,10 @@ int process11()
     {
         leds[8][i] = CRGB(0,100,0);  // Green,RED,BLUE
         FastLED.show();
-        delay(30);
+        delay(500);
         leds[8][i-1] = CRGB(0,0,0);  // Green,RED,BLUE
         FastLED.show();
-        delay(30);  
+        delay(500);  
     }
 }
 
@@ -426,10 +434,11 @@ int process14()
 }
 
 //  process 16 - pipe line: slug pump building to oxidation ditch
-int process16(){
+int process16()
+{
     for(i=0;i<40;i++)
     {
-        leds[7][i] = CRGB(50,50,50);  // Green,RED,BLUE
+        leds[7][i] = CRGB(70,70,70);  // Green,RED,BLUE
         FastLED.show();
         delay(15);
     }
