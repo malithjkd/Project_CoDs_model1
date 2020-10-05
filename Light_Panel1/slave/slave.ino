@@ -1,12 +1,34 @@
+/*  Malith JKD
+ *  05.10.2020
+ *
+ *  process 1 - pipe line: sewage line incomming
+ *  process 2 - Mesuring building
+ *  process 3 - pilimenary treatment building
+ *  process 4 - pipe line: pilimenary treatment building to oxidation ditch
+ *  process 5 - oxidation ditch
+ *  process 6 - pipe line: oxidation ditch to sedimantation tank
+ *  process 7 - sedimantation tank
+ *  process 8 - pipe line: sedimentation tank to disinfection building
+ *  process 9 - disinfection building
+ *  process 10 - pipe line: Treated effluent
+ *  process 11 - pipe line: sedimentation tank to slug pump building 
+ *  process 12 - slug pump building
+ *  process 13 - pipe line: slug pump building to oxidation tank
+ *  process 14 - pipe line: slug pump building to slug treatment building
+ *  process 15 - slug treatment building
+ *  process 16 - pipe line: slug pump building to oxidation ditch
+ */
 #include <Wire.h>
 #include <FastLED.h>
 
-#define NUM_STRIPS 8 //no of led strips
+#define NUM_STRIPS 11 //no of led strips
 #define NUM_LEDS 106
 #define CLOCK_PIN 13
 
 // Define the array of leds
 CRGB leds[NUM_STRIPS][NUM_LEDS];
+
+
 int i = 0;
 int j = 0;
 int k = 0;
@@ -16,13 +38,19 @@ int reset = 0;
 int slaveReady = 53;
 int x = 0;
 
-int process6();
-int process7();
-int process8();
-int process9();
-int process10();  // good water out from the pump room
-int process11();  // slug collection from round tank to bulding
-
+// defining functions for 
+  
+int process6();     //  process 6 - pipe line: oxidation ditch to sedimantation tank
+int process7();     //  process 7 - sedimantation tank
+int process8();     //  process 8 - pipe line: sedimentation tank to disinfection building
+int process9();     //  process 9 - disinfection building
+int process10();    //  process 10 - pipe line: Treated effluent
+int process11();    //  process 11 - pipe line: sedimentation tank to slug pump building
+int process12();    //  process 12 - slug pump building
+int process13();    //  process 13 - pipe line: slug pump building to oxidation tank
+int process14();    //  process 14 - pipe line: slug pump building to slug treatment building
+int process15();    //  process 15 - slug treatment building
+int process16();    //  process 16 - pipe line: slug pump building to oxidation ditch(air line)
 
 void setup() {
 
@@ -31,18 +59,17 @@ void setup() {
     Wire.onReceive(receiveEvent);
     Serial.begin(9600);
 
-    FastLED.addLeds<WS2812B, 2, RGB>(leds[0], NUM_LEDS);  // precess 6 & process7 *
-    FastLED.addLeds<WS2812B, 3, RGB>(leds[1], NUM_LEDS);  // Process 1 *
-    FastLED.addLeds<WS2812B, 4, RGB>(leds[2], NUM_LEDS);  // process 8 *
-    FastLED.addLeds<WS2812B, 5, RGB>(leds[3], NUM_LEDS);  // process 9 *
-    FastLED.addLeds<WS2812B, 6, RGB>(leds[4], NUM_LEDS);  // process 14 *
-    FastLED.addLeds<WS2812B, 7, RGB>(leds[5], NUM_LEDS);  // process 8 *
-    FastLED.addLeds<WS2812B, 8, RGB>(leds[6], NUM_LEDS);  // pricess 13 *
-    FastLED.addLeds<WS2812B, 9, RGB>(leds[7], NUM_LEDS);  // ariation line for (==) tank **need to be tested
+    FastLED.addLeds<WS2812B, 2, RGB>(leds[0], NUM_LEDS);  // process 6 - pipe line: oxidation ditch to sedimantation tank  & process 7 - sedimantation tank 
+    FastLED.addLeds<WS2812B, 3, RGB>(leds[1], NUM_LEDS);  // process 10 - pipe line: Treated effluent
+    FastLED.addLeds<WS2812B, 4, RGB>(leds[2], NUM_LEDS);  // process 8 - pipe line: sedimentation tank to disinfection building
+    FastLED.addLeds<WS2812B, 5, RGB>(leds[3], NUM_LEDS);  // process 9 - disinfection building
+    FastLED.addLeds<WS2812B, 6, RGB>(leds[4], NUM_LEDS);  // process 14 - pipe line: slug pump building to slug treatment building (red long line -69)
+    FastLED.addLeds<WS2812B, 7, RGB>(leds[5], NUM_LEDS);  // process 8 - pipe line: sedimentation tank to disinfection building(blue line)
+    FastLED.addLeds<WS2812B, 8, RGB>(leds[6], NUM_LEDS);  // process 13 - pipe line: slug pump building to oxidation tank
+    FastLED.addLeds<WS2812B, 9, RGB>(leds[7], NUM_LEDS);  // process 16 - pipe line: slug pump building to oxidation ditch(air line)
     FastLED.addLeds<WS2812B, 10, RGB>(leds[8], NUM_LEDS);  // **need to be tested
     FastLED.addLeds<WS2812B, 11, RGB>(leds[9], NUM_LEDS);  // **need to be tested
-    
-    
+    FastLED.addLeds<WS2812B, 12, RGB>(leds[10], NUM_LEDS);  // **need to be tested
 }
 
 void receiveEvent(int bytes) {
@@ -51,10 +78,17 @@ void receiveEvent(int bytes) {
 
 void loop() 
 {
-
-    process11()
-    
-/*    if(x == 0)
+    process6();   // process 6 - pipe line: oxidation ditch to sedimantation tank
+    process7();   // process 7 - sedimantation tank
+    process8();   // process 8 - pipe line: sedimentation tank to disinfection building
+    process9();   // process 9 - disinfection building
+    process10();  // process 10 - pipe line: Treated effluent
+    process11();  // process 11 - pipe line: sedimentation tank to slug pump building
+    process13();  // process 13 - pipe line: slug pump building to oxidation tank
+    process14();  // process 14 - pipe line: slug pump building to slug treatment building (red long line -69)
+    process16();  // process 16 - pipe line: slug pump building to oxidation ditch(air line)
+    /*
+    if(x == 0)
     {
         digitalWrite(slaveReady, LOW);            // slave is busy
         reset = 0;
@@ -137,13 +171,14 @@ void loop()
         delay(10);
     }
 
-*/
+    */
 
 }   //end of loop
 
 
-//process functions
+//process functions section
 
+//  process 6 - pipe line: oxidation ditch to sedimantation tank
 int process6()
 {
   if(reset == 0){
@@ -163,6 +198,8 @@ int process6()
     }   // end of for loop 
   }   // end of if
 }   // end of function 
+
+//  process 7 - sedimantation tank
 
 int process7()
 {
@@ -264,7 +301,7 @@ int process7()
     delay(15);
 }
 
-//prcess 8
+//  process 8 - pipe line: sedimentation tank to disinfection building
 
 int process8()
 {
@@ -306,7 +343,7 @@ int process8()
     FastLED.show();
 }
 
-
+//  process 9 - disinfection building
 int process9()      // pump house clean water
 {
     for(i=0;i<12;i++)
@@ -328,7 +365,7 @@ int process9()      // pump house clean water
 }
 
 
-// process 10----------------------------------------------
+//  process 10 - pipe line: Treated effluent
 int process10()
 { 
     for(i=0;i<106;i++)
@@ -343,12 +380,22 @@ int process10()
     }
 }
 
+//  process 11 - pipe line: sedimentation tank to slug pump building 
 int process11()
 {
-    
+    for(i=0;i<12;i++)
+    {
+        leds[8][i] = CRGB(0,100,0);  // Green,RED,BLUE
+        FastLED.show();
+        delay(30);
+        leds[8][i-1] = CRGB(0,0,0);  // Green,RED,BLUE
+        FastLED.show();
+        delay(30);  
+    }
 }
 
 
+//  process 13 - pipe line: slug pump building to oxidation tank
 int process13(){
     // process 13
     for(i=0;i<31;i++)
@@ -362,17 +409,36 @@ int process13(){
     }
 }
 
-int process14(){
-    // process 14
+//  process 14 - pipe line: slug pump building to slug treatment building
+int process14()
+{
     for(i=0;i<69;i++)
     {
-        leds[4][i] = CRGB(0,125,5);  // Green,RED,BLUE
+        leds[4][i] = CRGB(0,100,0);  // Green,RED,BLUE
         FastLED.show();
         delay(15);
 
         leds[4][i-1] = CRGB(0,0,0);  // Green,RED,BLUE
         FastLED.show();
-        delay(10);
+        delay(15);
     }
+
+}
+
+//  process 16 - pipe line: slug pump building to oxidation ditch
+int process16(){
+    for(i=0;i<40;i++)
+    {
+        leds[7][i] = CRGB(50,50,50);  // Green,RED,BLUE
+        FastLED.show();
+        delay(15);
+    }
+    for(i=0;i<40;i++)
+    {
+        leds[7][i] = CRGB(0,0,0);  // Green,RED,BLUE
+        FastLED.show();
+        delay(15);
+    }
+    
 
 }
