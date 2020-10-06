@@ -95,7 +95,7 @@ void loop()
         reset = 0;
         digitalWrite(slaveReady, HIGH);
         delay(30);
-    }else if(x ==1)
+    }else if(x == 1)
     {
         digitalWrite(slaveReady, LOW);
         Serial.println("inside process 6");
@@ -228,111 +228,117 @@ int process6()
         leds[0][i] = CRGB(0,0,0);  // Green,RED,BLUE
         FastLED.show();
         delay(70);  
-    }   // end of for loop 
-  }   // end of if
+    }   // end of switching off loop 
+  }   // end of  reset if
 }   // end of function 
 
 //  process 7 - sedimantation tank
 
 int process7()
 {
-    for(i=20;i<49;i++)
-    {
-        k=i;
-        leds[0][k] = CRGB(10,10,100);
-        FastLED.show();
-        delay(15);
 
-        l = i+7;
-        if(l<49)
+    if(reset == 0)
+    {
+        for(i=20;i<49;i++)
         {
-            k=l;
-        }else
-        {
-            k=l-29;  
-        }
+            k=i;
+            leds[0][k] = CRGB(10,10,100);
+            FastLED.show();
+            delay(15);
+
+            l = i+7;
+            if(l<49)
+            {
+                k=l;
+            }else
+            {
+                k=l-29;  
+            }
             
-        leds[0][k] = CRGB(10,10,100);
-        FastLED.show();
-        delay(15);
+            leds[0][k] = CRGB(10,10,100);
+            FastLED.show();
+            delay(15);
       
-        l = i+14;
-        if(l<49)
-        {
-            k=l;
-        }else
-        {
-            k=l-29;  
+            l = i+14;
+            if(l<49)
+            {
+                k=l;
+            }else
+            {
+                k=l-29;  
+            }
+                
+            leds[0][k] = CRGB(10,10,100);
+            FastLED.show();
+            delay(15);
+          
+            l = i+22;
+            if(l<49)
+            {
+                k=l;
+            }else
+            {
+                k=l-29;  
+            }
+            leds[0][k] = CRGB(10,10,100);
+            FastLED.show();
+            delay(15);
+                   //off
+            leds[0][i-1] = CRGB(0,0,0);
+            FastLED.show();
+            delay(15);
+            l = i+6;
+            if(l<49)
+            {
+                k=l;
+            }else
+            {
+                k=l-29;  
+            }
+            leds[0][k] = CRGB(0,0,0);
+            FastLED.show();
+            delay(15);
+            l = i+13;
+            if(l<49)
+            {
+                k=l;
+            }else
+            {
+                k=l-29;  
+            }
+            leds[0][k] = CRGB(0,0,0);
+            FastLED.show();
+            delay(15);
+                
+            l = i+21;
+            if(l<49)
+            {
+                k=l;
+            }else
+            {
+                k=l-29;  
+            }
+            leds[0][k] = CRGB(0,0,0);
+            FastLED.show();
+            delay(15);
         }
-            
-        leds[0][k] = CRGB(10,10,100);
+        
+        leds[0][48] = CRGB(0,0,0);
         FastLED.show();
         delay(15);
-      
-        l = i+22;
-        if(l<49)
-        {
-            k=l;
-        }else
-        {
-            k=l-29;  
-        }
-        leds[0][k] = CRGB(10,10,100);
+        leds[0][26] = CRGB(0,0,0);
         FastLED.show();
         delay(15);
-               //off
-        leds[0][i-1] = CRGB(0,0,0);
+        leds[0][33] = CRGB(0,0,0);
         FastLED.show();
         delay(15);
-        l = i+6;
-        if(l<49)
-        {
-            k=l;
-        }else
-        {
-            k=l-29;  
-        }
-        leds[0][k] = CRGB(0,0,0);
+        leds[0][41] = CRGB(0,0,0);
         FastLED.show();
         delay(15);
-        l = i+13;
-        if(l<49)
-        {
-            k=l;
-        }else
-        {
-            k=l-29;  
-        }
-        leds[0][k] = CRGB(0,0,0);
-        FastLED.show();
-        delay(15);
-            
-        l = i+21;
-        if(l<49)
-        {
-            k=l;
-        }else
-        {
-            k=l-29;  
-        }
-        leds[0][k] = CRGB(0,0,0);
-        FastLED.show();
-        delay(15);
-    }
     
-    leds[0][48] = CRGB(0,0,0);
-    FastLED.show();
-    delay(15);
-    leds[0][26] = CRGB(0,0,0);
-    FastLED.show();
-    delay(15);
-    leds[0][33] = CRGB(0,0,0);
-    FastLED.show();
-    delay(15);
-    leds[0][41] = CRGB(0,0,0);
-    FastLED.show();
-    delay(15);
-}
+    }// end of reset if
+
+}// end of function 
 
 //  process 8 - pipe line: sedimentation tank to disinfection building (bulue line)
 

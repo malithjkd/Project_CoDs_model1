@@ -1,3 +1,24 @@
+/*  Malith JKD
+ *  06.10.2020
+ *
+ *  process 1 - pipe line: sewage line incomming
+ *  process 2 - Mesuring building
+ *  process 3 - pilimenary treatment building
+ *  process 4 - pipe line: pilimenary treatment building to oxidation ditch
+ *  process 5 - oxidation ditch
+ *  process 6 - pipe line: oxidation ditch to sedimantation tank
+ *  process 7 - sedimantation tank
+ *  process 8 - pipe line: sedimentation tank to disinfection building
+ *  process 9 - disinfection building
+ *  process 10 - pipe line: Treated effluent
+ *  process 11 - pipe line: sedimentation tank to slug pump building 
+ *  process 12 - slug pump building
+ *  process 13 - pipe line: slug pump building to oxidation tank
+ *  process 14 - pipe line: slug pump building to slug treatment building(red line)
+ *  process 15 - slug treatment building
+ *  process 16 - pipe line: slug pump building to oxidation ditch(weight line)
+ */
+ 
 #include <Wire.h>
 #include <FastLED.h>
 
@@ -20,9 +41,16 @@ int process7();
 int process8();
 int process9();
 int process10();
+int process11();
+int process12();
+int process13();
+int process14();
+int process15();
 
 // velriable diclaration for led 
 CRGB leds[NUM_STRIPS][NUM_LEDS];
+
+// velriable diclaration for process 
 int i = 0;
 int j = 0;
 int k = 0;
@@ -40,7 +68,7 @@ int y = 0;
 int z = 0;
 int a = 0;
 
-
+// velriable diclaration for relay functioning
 int relay1 = 22;
 int relay2 = 23;
 int relay3 = 24;
@@ -50,7 +78,10 @@ int relay6 = 29;
 int relay7 = 26;
 int relay8 = 27;
 
+// velriable diclaration for relay operation
 int relay_delay = 1500;
+
+// velriable diclaration slave status
 int slaveStatus = 0;
 
 
@@ -102,35 +133,42 @@ void loop(){
     Wire.endTransmission();       // sending value to arduino 2
     delay(100);
     process5();
+    
     Wire.beginTransmission(9);    // sending value to arduino 2
     Wire.write(0);                // sending value to arduino 2
     Wire.endTransmission();       // sending value to arduino 2
     delay(100);
     process6();
+    
     Wire.beginTransmission(9);    // sending value to arduino 2
     Wire.write(0);                // sending value to arduino 2
     Wire.endTransmission();       // sending value to arduino 2
     delay(100);
     process7();
+    
     Wire.beginTransmission(9);    // sending value to arduino 2
     Wire.write(0);                // sending value to arduino 2
     Wire.endTransmission();       // sending value to arduino 2
     delay(100);
     process8();
+    
     Wire.beginTransmission(9);    // sending value to arduino 2
     Wire.write(0);                // sending value to arduino 2
     Wire.endTransmission();       // sending value to arduino 2
     delay(100);
     process9();
+    
     Wire.beginTransmission(9);    // sending value to arduino 2
     Wire.write(0);                // sending value to arduino 2
     Wire.endTransmission();       // sending value to arduino 2
     delay(100);
     process10();
+    
     Wire.beginTransmission(9);    // sending value to arduino 2
     Wire.write(0);                // sending value to arduino 2
     Wire.endTransmission();       // sending value to arduino 2
     delay(100);
+    process11();
     
 
 }//end of loop
@@ -177,6 +215,7 @@ int process3()
 // process 4----------------------------------------------
 int process4()
 {
+    Serial.println("Process 4 starts");
     for(i=0;i<5;i++)
     {
         leds[1][i] = CRGB(75,214,6);  // Green,RED,BLUE
@@ -187,7 +226,7 @@ int process4()
         leds[1][i-1] = CRGB(0,0,0);  // Green,RED,BLUE
         leds[2][i-1] = CRGB(0,0,0);  // Green,RED,BLUE
         FastLED.show();
-        delay(100);   
+        delay(100);  
     }
     delay(30);
     leds[1][4] = CRGB(0,0,0);  // 
@@ -212,6 +251,7 @@ int process4()
     leds[3][6] = CRGB(0,0,0);  // Green,RED,BLUE
     FastLED.show();
     delay(10);
+    Serial.println("Process 4 finished");
 }
 
 // process 5----------------------------------------------
@@ -315,8 +355,6 @@ int process6()
     {
         Serial.println("Process 6 ends at slave stage");
     }
-    
-    
     return 0;
 }   
 //  end of process 6
@@ -325,9 +363,12 @@ int process6()
 int process7()
 {
     Serial.println("Process 7 starts");
+    
     Wire.beginTransmission(9);    // sending value to arduino 2
     Wire.write(2);                // sending value to arduino 2
     Wire.endTransmission();       // sending value to arduino 2
+    delay(50);
+    
     for(i=23;i<=52;i++)
     {
         j = i;
@@ -541,7 +582,7 @@ int process10()
     Wire.write(5);                // sending value to arduino 2
     Wire.endTransmission();       // sending value to arduino 2
     delay(50);
-    for(i=0;i<160;i++)
+    for(i=0;i<200;i++)
     {
         slaveStatus = digitalRead(slaveReady);
         Serial.println(slaveStatus);
@@ -552,4 +593,27 @@ int process10()
         delay(50);
     }
     Serial.println("Process 10 ends");
+}
+
+
+// process 10--------------------------------------------------.
+
+int process11()
+{
+    Serial.println("Process 11 starts");
+    Wire.beginTransmission(9);    // sending value to arduino 2
+    Wire.write(6);                // sending value to arduino 2
+    Wire.endTransmission();       // sending value to arduino 2
+    delay(50);
+    for(i=0;i<200;i++)
+    {
+        slaveStatus = digitalRead(slaveReady);
+        Serial.println(slaveStatus);
+        if (slaveStatus > 0)
+        {
+            break;  
+        }
+        delay(50);
+    }
+    Serial.println("Process 11 ends");
 }
