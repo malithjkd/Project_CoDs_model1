@@ -33,6 +33,7 @@ int i = 0;
 int j = 0;
 int k = 0;
 int l = 0;
+int m = 0;
 int reset = 0;
 
 int slaveReady = 53;
@@ -67,9 +68,9 @@ void setup() {
     FastLED.addLeds<WS2812B, 7, RGB>(leds[5], NUM_LEDS);  // process 8 - pipe line: sedimentation tank to disinfection building(blue line)
     FastLED.addLeds<WS2812B, 8, RGB>(leds[6], NUM_LEDS);  // process 13 - pipe line: slug pump building to oxidation tank
     FastLED.addLeds<WS2812B, 9, RGB>(leds[7], NUM_LEDS);  // process 16 - pipe line: slug pump building to oxidation ditch(air line)
-    FastLED.addLeds<WS2812B, 10, RGB>(leds[8], NUM_LEDS);  // **need to be tested
+    FastLED.addLeds<WS2812B, 10, RGB>(leds[8], NUM_LEDS);  // process 11 - pipe line: sedimentation tank to slug pump building
     FastLED.addLeds<WS2812B, 11, RGB>(leds[9], NUM_LEDS);  // **need to be tested
-    FastLED.addLeds<WS2812B, 12, RGB>(leds[10], NUM_LEDS);  // **need to be tested
+    FastLED.addLeds<WS2812B, 12, RGB>(leds[10], NUM_LEDS);  // process 11 - pipe line: sedimentation tank to slug pump building
 }
 
 void receiveEvent(int bytes) {
@@ -80,13 +81,13 @@ void loop()
 {
     //process6();   // process 6 - pipe line: oxidation ditch to sedimantation tank
     //process7();   // process 7 - sedimantation tank
-    process8();   // process 8 - pipe line: sedimentation tank to disinfection building
+    //process8();   // process 8 - pipe line: sedimentation tank to disinfection building
     //process9();   // process 9 - disinfection building
     //process10();  // process 10 - pipe line: Treated effluent
     //process11();  // process 11 - pipe line: sedimentation tank to slug pump building
     //process13();  // process 13 - pipe line: slug pump building to oxidation tank
     //process14();  // process 14 - pipe line: slug pump building to slug treatment building (red long line -69)
-    //process16();  // process 16 - pipe line: slug pump building to oxidation ditch(air line)
+    process16();  // process 16 - pipe line: slug pump building to oxidation ditch(air line)
     /*
     if(x == 0)
     {
@@ -391,30 +392,47 @@ int process10()
 //  process 11 - pipe line: sedimentation tank to slug pump building 
 int process11()
 {
-    for(i=0;i<12;i++)
+    j = 4;
+    k = 0;
+    l = 8;
+    
+    for(i=3;i>=0;i--)
     {
         leds[8][i] = CRGB(0,100,0);  // Green,RED,BLUE
+        leds[8][j] = CRGB(0,100,0);
+        leds[10][k] = CRGB(0,100,0);
+        m = l/2;
+        leds[10][m] = CRGB(0,100,0);
         FastLED.show();
         delay(500);
-        leds[8][i-1] = CRGB(0,0,0);  // Green,RED,BLUE
+        j++;
+        k++;
+        l++;
+    }
+
+    j = 4;
+    k = 0;
+    l = 8;
+    for(i=3;i>=0;i--)
+    {
+        leds[8][i] = CRGB(0,0,0);  // Green,RED,BLUE
+        leds[8][j] = CRGB(0,0,0);
+        leds[10][k] = CRGB(0,0,0);
+        m = l/2;
+        leds[10][m] = CRGB(0,0,0);
         FastLED.show();
-        delay(500);  
+        delay(500);
+        j++;
+        k++;
+        l++;
     }
 }
+// end of process 11
 
-
-//  process 13 - pipe line: slug pump building to oxidation tank
+//  process 13 - pipe line: slug pump building to oxidation tank(red line)
 int process13(){
     // process 13
-    for(i=0;i<31;i++)
-    {
-        leds[6][i] = CRGB(50,50,50);  // Green,RED,BLUE
-        FastLED.show();
-        delay(30);
-        leds[6][i-1] = CRGB(0,0,0);  // Green,RED,BLUE
-        FastLED.show();
-        delay(30);  
-    }
+    
 }
 
 //  process 14 - pipe line: slug pump building to slug treatment building
@@ -436,18 +454,43 @@ int process14()
 //  process 16 - pipe line: slug pump building to oxidation ditch
 int process16()
 {
-    for(i=0;i<40;i++)
+    // swiching on leds
+    for(i=0;i<=36;i++)
     {
-        leds[7][i] = CRGB(70,70,70);  // Green,RED,BLUE
+        j = 0;
+        leds[6][i] = CRGB(50,50,50);  // Green,RED,BLUE
+        
+        if (i == 10)
+        {
+            leds[4][9] = CRGB(50,50,50);  // Green,RED,BLUE
+        } else if (i == 11)
+        {
+            leds[1][20] = CRGB(50,50,50); 
+        } else if(i > 12)
+        {
+            leds[7][i-12] = CRGB(70,70,70);  // Green,RED,BLUE
+        }
         FastLED.show();
-        delay(15);
+        delay(100);      
     }
-    for(i=0;i<40;i++)
+    j = 0;
+    // switching off leds
+    for(i=0;i<=36;i++)
     {
-        leds[7][i] = CRGB(0,0,0);  // Green,RED,BLUE
+        leds[6][i] = CRGB(0,0,0);  // Green,RED,BLUE
+        if (i == 10)
+        {
+            leds[4][9] = CRGB(0,0,0);  // Green,RED,BLUE
+        }else if (i == 11)
+        {
+            leds[1][20] = CRGB(0,0,0); 
+        }else if(i > 12)
+        {
+            leds[7][i-12] = CRGB(0,0,0);  // Green,RED,BLUE
+        }
         FastLED.show();
-        delay(15);
+        delay(100);
     }
-    
 
 }
+//  end of function 16
