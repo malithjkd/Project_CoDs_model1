@@ -109,7 +109,7 @@ void setup() {
     digitalWrite(relay8, HIGH);
 
     FastLED.addLeds<WS2812B, 2, RGB>(leds[0], 40);  // precess 1
-    FastLED.addLeds<WS2812B, 3, RGB>(leds[1], 90);  // Process 4  // precess 5
+    FastLED.addLeds<WS2812B, 3, RGB>(leds[1], 90);  // Process 4  // process 5 - oxidation ditch
     FastLED.addLeds<WS2812B, 4, RGB>(leds[2], NUM_LEDS);  // process 4  
     FastLED.addLeds<WS2812B, 5, RGB>(leds[3], NUM_LEDS);  // process 4  // precess 5
     FastLED.addLeds<WS2812B, 6, RGB>(leds[4], NUM_LEDS);  // process 4  // precess 5
@@ -128,6 +128,7 @@ void loop(){
     process3();
     process4();
     process5();
+
     
     Wire.beginTransmission(9);    // sending value to arduino 2
     Wire.write(0);                // sending value to arduino 2
@@ -135,6 +136,7 @@ void loop(){
     delay(100);
     process6();
     delay(500);
+    
     Wire.beginTransmission(9);    // sending value to arduino 2
     Wire.write(0);
     delay(50);
@@ -166,7 +168,13 @@ void loop(){
     delay(100);
     process11();
 
-    
+    process12();
+
+    Wire.beginTransmission(9);    // sending value to arduino 2
+    Wire.write(0);                // sending value to arduino 2
+    Wire.endTransmission();       // sending value to arduino 2
+    delay(100);
+    process13();
 
 }//end of loop
 
@@ -377,7 +385,7 @@ int process7()
         leds[8][v] = CRGB(10,10,100);
         leds[9][p] = CRGB(10,10,100);
         FastLED.show();
-        delay(10);
+        delay(20);
 
         k = i+7;
         w = v+7;
@@ -408,7 +416,7 @@ int process7()
         leds[8][y] = CRGB(10,10,100);
         leds[9][s] = CRGB(10,10,100);
         FastLED.show();
-        delay(10);
+        delay(20);
 
         k = i+14;
         w = v+14;
@@ -438,7 +446,7 @@ int process7()
         leds[8][z] = CRGB(10,10,100);
         leds[9][t] = CRGB(10,10,100);
         FastLED.show();
-        delay(10);
+        delay(20);
 
         k = i+22;
         w = v+22;
@@ -468,51 +476,51 @@ int process7()
         leds[8][a] = CRGB(10,10,100);
         leds[9][u] = CRGB(10,10,100);
         FastLED.show();
-        delay(10);
+        delay(20);
 
         // swiching off
         leds[6][j-1] = CRGB(0,0,0);
         leds[8][v-1] = CRGB(0,0,0);
         leds[9][p-1] = CRGB(0,0,0);
         FastLED.show();
-        delay(10);
+        delay(20);
         leds[6][l-1] = CRGB(0,0,0);
         leds[8][y-1] = CRGB(0,0,0);
         leds[9][s-1] = CRGB(0,0,0);
         FastLED.show();
-        delay(10);
+        delay(20);
         leds[6][m-1] = CRGB(0,0,0);
         leds[8][z-1] = CRGB(0,0,0);
         leds[9][t-1] = CRGB(0,0,0);
         FastLED.show();
-        delay(10);
+        delay(20);
         leds[6][n-1] = CRGB(0,0,0);
         leds[8][a-1] = CRGB(0,0,0);
         leds[9][u-1] = CRGB(0,0,0);
         FastLED.show();
-        delay(10);
+        delay(20);
         
     }
     leds[6][52] = CRGB(0,0,0);
     leds[8][32] = CRGB(0,0,0);
     leds[9][34] = CRGB(0,0,0);
     FastLED.show();
-    delay(15);
+    delay(20);
     leds[6][30] = CRGB(0,0,0);
     leds[8][10] = CRGB(0,0,0);
     leds[9][14] = CRGB(0,0,0);
     FastLED.show();
-    delay(15);
+    delay(20);
     leds[6][37] = CRGB(0,0,0);
     leds[8][17] = CRGB(0,0,0);
     leds[9][21] = CRGB(0,0,0);
     FastLED.show();
-    delay(15);
+    delay(20);
     leds[6][45] = CRGB(0,0,0);
     leds[8][25] = CRGB(0,0,0);
     leds[9][28] = CRGB(0,0,0);
     FastLED.show();
-    delay(15);
+    delay(20);
     
     Serial.println("Process 7 stps in master ");
     // waiting for slave to finish the pocess
@@ -596,7 +604,7 @@ int process10()
 }
 
 
-// process 10--------------------------------------------------.
+// process 11--------------------------------------------------
 
 int process11()
 {
@@ -616,4 +624,54 @@ int process11()
         delay(50);
     }
     Serial.println("Process 11 ends");
+}
+
+// process 12--------------------------------------------------
+int process12()
+{
+    Serial.println("Process 12 starts");
+    digitalWrite(relay3, LOW);
+    delay(relay_delay);
+    digitalWrite(relay3, HIGH);
+    Serial.println("Process 11 ends");
+}
+
+
+// process 13--------------------------------------------------
+
+int process13()
+{
+    Serial.println("Process 13 starts");
+    Wire.beginTransmission(9);    // sending value to arduino 2
+    Wire.write(7);                // sending value to arduino 2
+    Wire.endTransmission();       // sending value to arduino 2
+    delay(50);
+    i = 80;
+    for(i=80;i>60;i--)
+    {
+        leds[7][i] = CRGB(0,75,0);
+        FastLED.show();
+        delay(70); 
+    }
+    for(i=80;i>60;i--)
+    {
+        leds[7][i] = CRGB(0,0,0);
+        FastLED.show();
+        delay(70); 
+    }
+
+
+
+    
+    for(i=0;i<200;i++)
+    {
+        slaveStatus = digitalRead(slaveReady);
+        Serial.println(slaveStatus);
+        if (slaveStatus > 0)
+        {
+            break;  
+        }
+        delay(50);
+    }
+    Serial.println("Process 13 ends");
 }

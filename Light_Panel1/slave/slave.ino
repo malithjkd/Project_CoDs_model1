@@ -22,7 +22,7 @@
 #include <FastLED.h>
 
 #define NUM_STRIPS 12 //no of led strips
-#define NUM_LEDS 106
+#define NUM_LEDS 100
 #define CLOCK_PIN 13
 
 // Define the array of leds
@@ -120,7 +120,6 @@ void loop()
         {
             process7();
             reset = 1;
-            delay(100);
         }
         Serial.println("process 7 ends");
         digitalWrite(slaveReady, HIGH);
@@ -418,7 +417,7 @@ int process9()      // pump house clean water
 //  process 10 - pipe line: Treated effluent
 int process10()
 { 
-    for(i=0;i<106;i++)
+    for(i=0;i<100;i++)
     {
         leds[1][i] = CRGB(80,25,125);  // Green,RED,BLUE 1
         FastLED.show();
