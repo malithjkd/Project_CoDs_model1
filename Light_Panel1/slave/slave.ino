@@ -14,9 +14,9 @@
  *  process 11 - pipe line: sedimentation tank to slug pump building 
  *  process 12 - slug pump building
  *  process 13 - pipe line: slug pump building to oxidation tank
- *  process 14 - pipe line: slug pump building to slug treatment building
+ *  process 14 - pipe line: slug pump building to slug treatment building(red line)
  *  process 15 - slug treatment building
- *  process 16 - pipe line: slug pump building to oxidation ditch
+ *  process 16 - pipe line: slug pump building to oxidation ditch(weight line)
  */
 #include <Wire.h>
 #include <FastLED.h>
@@ -85,10 +85,10 @@ void loop()
     //process9();   // process 9 - disinfection building
     //process10();  // process 10 - pipe line: Treated effluent
     //process11();  // process 11 - pipe line: sedimentation tank to slug pump building
-    //process13();  // process 13 - pipe line: slug pump building to oxidation tank
+    //process13();  // process 13 - pipe line: slug pump building to oxidation tank (red line)
     //process14();  // process 14 - pipe line: slug pump building to slug treatment building (red long line -69)
-    process16();  // process 16 - pipe line: slug pump building to oxidation ditch(air line)
-    /*
+    //process16();  // process 16 - pipe line: slug pump building to oxidation ditch(air line)
+    
     if(x == 0)
     {
         digitalWrite(slaveReady, LOW);            // slave is busy
@@ -98,7 +98,7 @@ void loop()
     }else if(x ==1)
     {
         digitalWrite(slaveReady, LOW);
-        Serial.println("inside process 1");
+        Serial.println("inside process 6");
         if(reset == 0)
         {
             process6();
@@ -109,7 +109,7 @@ void loop()
     }else if(x == 2)
     {
         digitalWrite(slaveReady, LOW);
-        Serial.println("inside process 2");
+        Serial.println("inside process 7");
         if(reset == 0)
         {
             process7();
@@ -121,7 +121,7 @@ void loop()
     }else if(x == 3)
     {
         digitalWrite(slaveReady, LOW);
-        Serial.println("inside process 3");
+        Serial.println("inside process 8");
         Serial.println(x);
         if(reset == 0)
         {
@@ -133,7 +133,7 @@ void loop()
     }else if(x == 4)
     {
         digitalWrite(slaveReady, LOW);
-        Serial.println("inside process 4");
+        Serial.println("inside process 9");
         Serial.println(x);
         if(reset == 0)
         {
@@ -145,7 +145,7 @@ void loop()
     }else if(x == 5)
     {
         digitalWrite(slaveReady, LOW);
-        Serial.println("inside process 5");
+        Serial.println("inside process 10");
         Serial.println(x);
         if(reset == 0)
         {
@@ -157,25 +157,57 @@ void loop()
     }else if(x == 6)
     {
         digitalWrite(slaveReady, LOW);
-        Serial.println("inside process 6");
+        Serial.println("inside process 11");
         Serial.println(x);
-        delay(1000);
+        if(reset == 0)
+        {
+            reset = 1;
+            process11();      
+        }
         digitalWrite(slaveReady, HIGH);
         delay(10);
     }else if(x == 7)
     {
         digitalWrite(slaveReady, LOW);
-        Serial.println("inside process 7");
+        Serial.println("inside process 13");
         Serial.println(x);
-        delay(6000);
+        if(reset == 0)
+        {
+            reset = 1;
+            process13();      
+        }
+        digitalWrite(slaveReady, HIGH);
+        delay(10);
+    }else if(x == 8)
+    {
+        digitalWrite(slaveReady, LOW);
+        Serial.println("inside process 14");
+        Serial.println(x);
+        if(reset == 0)
+        {
+            reset = 1;
+            process14();      
+        }
+        digitalWrite(slaveReady, HIGH);
+        delay(10);
+    }else if(x == 9)
+    {
+        digitalWrite(slaveReady, LOW);
+        Serial.println("inside process 16");
+        Serial.println(x);
+        if(reset == 0)
+        {
+            reset = 1;
+            process16();      
+        }
         digitalWrite(slaveReady, HIGH);
         delay(10);
     }
 
-    */
+    
+
 
 }   //end of loop
-
 
 //process functions section
 
@@ -429,11 +461,23 @@ int process11()
 }
 // end of process 11
 
+
 //  process 13 - pipe line: slug pump building to oxidation tank(red line)
 int process13(){
-    // process 13
-    
+    for(i=0;i<5;i++)
+    {
+        leds[9][i] = CRGB(0,100,0);  // Green,RED,BLUE
+        FastLED.show();
+        delay(100);
+    }
+    for(i=0;i<5;i++)
+    {
+        leds[9][i] = CRGB(0,0,0);  // Green,RED,BLUE
+        FastLED.show();
+        delay(100);
+    }
 }
+//  
 
 //  process 14 - pipe line: slug pump building to slug treatment building
 int process14()
