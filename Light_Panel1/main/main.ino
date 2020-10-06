@@ -108,8 +108,8 @@ void setup() {
     digitalWrite(relay7, HIGH);
     digitalWrite(relay8, HIGH);
 
-    FastLED.addLeds<WS2812B, 2, RGB>(leds[0], NUM_LEDS);  // precess 1
-    FastLED.addLeds<WS2812B, 3, RGB>(leds[1], NUM_LEDS);  // Process 4  // precess 5
+    FastLED.addLeds<WS2812B, 2, RGB>(leds[0], 40);  // precess 1
+    FastLED.addLeds<WS2812B, 3, RGB>(leds[1], 90);  // Process 4  // precess 5
     FastLED.addLeds<WS2812B, 4, RGB>(leds[2], NUM_LEDS);  // process 4  
     FastLED.addLeds<WS2812B, 5, RGB>(leds[3], NUM_LEDS);  // process 4  // precess 5
     FastLED.addLeds<WS2812B, 6, RGB>(leds[4], NUM_LEDS);  // process 4  // precess 5
@@ -127,11 +127,6 @@ void loop(){
     process2();
     process3();
     process4();
-    
-    Wire.beginTransmission(9);    // sending value to arduino 2
-    Wire.write(0);                // sending value to arduino 2
-    Wire.endTransmission();       // sending value to arduino 2
-    delay(100);
     process5();
     
     Wire.beginTransmission(9);    // sending value to arduino 2
@@ -139,9 +134,10 @@ void loop(){
     Wire.endTransmission();       // sending value to arduino 2
     delay(100);
     process6();
-    
+    delay(500);
     Wire.beginTransmission(9);    // sending value to arduino 2
-    Wire.write(0);                // sending value to arduino 2
+    Wire.write(0);
+    delay(50);
     Wire.endTransmission();       // sending value to arduino 2
     delay(100);
     process7();
@@ -169,6 +165,7 @@ void loop(){
     Wire.endTransmission();       // sending value to arduino 2
     delay(100);
     process11();
+
     
 
 }//end of loop
@@ -283,6 +280,7 @@ int process5()
 }
 
 // process 6----------------------------------------------
+
 int process6()
 {
     Serial.println("process6 starts");
@@ -366,7 +364,8 @@ int process7()
     
     Wire.beginTransmission(9);    // sending value to arduino 2
     Wire.write(2);                // sending value to arduino 2
-    Wire.endTransmission();       // sending value to arduino 2
+    delay(50);
+    Wire.endTransmission();       // sending value to arduino 2  
     delay(50);
     
     for(i=23;i<=52;i++)
@@ -515,10 +514,9 @@ int process7()
     FastLED.show();
     delay(15);
     
-    
     Serial.println("Process 7 stps in master ");
     // waiting for slave to finish the pocess
-    for(i=0;i<20;i++)
+    for(i=0;i<30;i++)
     {
         slaveStatus = digitalRead(slaveReady);
         Serial.println(slaveStatus);
@@ -526,8 +524,10 @@ int process7()
         {
             break;  
         }
-        delay(500);
+        delay(100);
+        
     }
+    Serial.println(slaveStatus);
 } // end of process 7
 
 // process 8------------------------------------------

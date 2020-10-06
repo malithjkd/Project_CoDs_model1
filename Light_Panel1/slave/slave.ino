@@ -98,6 +98,7 @@ void loop()
     {
         digitalWrite(slaveReady, LOW);            // slave is busy
         reset = 0;
+        Serial.println("reset");
         digitalWrite(slaveReady, HIGH);
         delay(30);
     }else if(x == 1)
@@ -119,6 +120,7 @@ void loop()
         {
             process7();
             reset = 1;
+            delay(100);
         }
         Serial.println("process 7 ends");
         digitalWrite(slaveReady, HIGH);
@@ -241,9 +243,7 @@ int process6()
 
 int process7()
 {
-
-    if(reset == 0)
-    {
+    Serial.println("inside process 7");
         for(i=20;i<49;i++)
         {
             k=i;
@@ -340,8 +340,6 @@ int process7()
         leds[0][41] = CRGB(0,0,0);
         FastLED.show();
         delay(15);
-    
-    }// end of reset if
 
 }// end of function 
 
