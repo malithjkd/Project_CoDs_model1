@@ -1,5 +1,5 @@
 /*  Malith JKD
- *  05.10.2020
+ *  19:35 : 06.10.2020
  *
  *  process 1 - pipe line: sewage line incomming
  *  process 2 - Mesuring building
@@ -79,16 +79,21 @@ void receiveEvent(int bytes) {
 
 void loop() 
 {
-    //process6();   // process 6 - pipe line: oxidation ditch to sedimantation tank
-    //process7();   // process 7 - sedimantation tank
-    //process8();   // process 8 - pipe line: sedimentation tank to disinfection building
-    //process9();   // process 9 - disinfection building
-    //process10();  // process 10 - pipe line: Treated effluent
-    //process11();  // process 11 - pipe line: sedimentation tank to slug pump building
-    //process13();  // process 13 - pipe line: slug pump building to oxidation tank (red line)
-    //process14();  // process 14 - pipe line: slug pump building to slug treatment building (red long line -69)
-    //process16();  // process 16 - pipe line: slug pump building to oxidation ditch(air line)
-    
+
+/*
+    process6();   // process 6 - pipe line: oxidation ditch to sedimantation tank
+    process7();   // process 7 - sedimantation tank
+    process8();   // process 8 - pipe line: sedimentation tank to disinfection building
+    process9();   // process 9 - disinfection building
+    process10();  // process 10 - pipe line: Treated effluent
+    process11();  // process 11 - pipe line: sedimentation tank to slug pump building
+    process13();  // process 13 - pipe line: slug pump building to oxidation tank (red line)
+    process14();  // process 14 - pipe line: slug pump building to slug treatment building (red long line -69)
+    process16();  // process 16 - pipe line: slug pump building to oxidation ditch(air line)
+*/
+
+
+
     if(x == 0)
     {
         digitalWrite(slaveReady, LOW);            // slave is busy
@@ -204,7 +209,7 @@ void loop()
         delay(10);
     }
 
-    
+
 
 
 }   //end of loop
