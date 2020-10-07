@@ -476,14 +476,23 @@ int process13(){
     {
         leds[9][i] = CRGB(0,100,0);  // Green,RED,BLUE
         FastLED.show();
-        delay(100);
+        delay(120);
     }
+    leds[1][12] = CRGB(0,100,0);  // Green,RED,BLUE
+    FastLED.show(); 
+    delay(120);
+    
+    delay(1800);
+    
     for(i=0;i<5;i++)
     {
         leds[9][i] = CRGB(0,0,0);  // Green,RED,BLUE
         FastLED.show();
-        delay(100);
+        delay(120);
     }
+    leds[1][12] = CRGB(0,0,0);  // Green,RED,BLUE
+    FastLED.show(); 
+    delay(120);
 }
 //  
 

@@ -115,7 +115,7 @@ void setup() {
     FastLED.addLeds<WS2812B, 6, RGB>(leds[4], NUM_LEDS);  // process 4  // precess 5
     FastLED.addLeds<WS2812B, 7, RGB>(leds[5], NUM_LEDS);  // process 11
     FastLED.addLeds<WS2812B, 8, RGB>(leds[6], NUM_LEDS);                             // process 6  // process 7
-    FastLED.addLeds<WS2812B, 9, RGB>(leds[7], NUM_LEDS);                // process 5 // process 11
+    FastLED.addLeds<WS2812B, 9, RGB>(leds[7], NUM_LEDS);                // process 5 // process 13
     FastLED.addLeds<WS2812B, 10, RGB>(leds[8], NUM_LEDS);                            // process 6  // process 7
     FastLED.addLeds<WS2812B, 11, RGB>(leds[9], NUM_LEDS);                            // process 6  // process 7
 
@@ -123,12 +123,12 @@ void setup() {
 
 void loop(){
     
-    process1();
-    process2();
-    process3();
+    //process1();
+    //process2();
+    //process3();
     process4();
     process5();
-
+/*
     
     Wire.beginTransmission(9);    // sending value to arduino 2
     Wire.write(0);                // sending value to arduino 2
@@ -175,6 +175,8 @@ void loop(){
     Wire.endTransmission();       // sending value to arduino 2
     delay(100);
     process13();
+    */
+    delay(2000);
 
 }//end of loop
 
@@ -220,44 +222,44 @@ int process3()
 // process 4----------------------------------------------
 int process4()
 {
+
     Serial.println("Process 4 starts");
-    for(i=0;i<5;i++)
+    for(i=0;i<12;i++)
     {
-        leds[1][i] = CRGB(75,214,6);  // Green,RED,BLUE
-        leds[2][i] = CRGB(75,214,6);  // Green,RED,BLUE
+        if(i<10)
+        {
+            leds[1][i/2] = CRGB(75,214,6);  // Green,RED,BLUE  
+        }
+        if(i<5)
+        {
+            leds[2][i] = CRGB(75,214,6);  // Green,RED,BLUE
+        } else if (i>=5)
+        {
+            leds[3][i-5] = CRGB(75,214,6);  // Green,RED,BLUE  
+        }
         FastLED.show();
-        delay(100);
-        
-        leds[1][i-1] = CRGB(0,0,0);  // Green,RED,BLUE
-        leds[2][i-1] = CRGB(0,0,0);  // Green,RED,BLUE
-        FastLED.show();
-        delay(100);  
+        delay(250);
     }
-    delay(30);
-    leds[1][4] = CRGB(0,0,0);  // 
-    leds[2][4] = CRGB(0,0,0);  // we need to add the other 2 lights to hear before this stop
-    FastLED.show();
-    delay(10);  
+    delay(500);
+    for(i=0;i<12;i++)
+    {
+        leds[1][i/3] = CRGB(0,0,0);  // Green,RED,BLUE  
+        if(i<5)
+        {
+            leds[2][i] = CRGB(0,0,0);  // Green,RED,BLUE
+        } else if (i>=5)
+        {
+            leds[3][i-5] = CRGB(0,0,0);  // Green,RED,BLUE  
+        }
+        FastLED.show();
+        delay(250);
+    }
     
-    for(i=0;i<7;i++)
-    {
-        leds[3][i] = CRGB(75,214,6);  // Green,RED,BLUE
-        FastLED.show();
-        delay(100);
-        
-        leds[3][i-1] = CRGB(0,0,0);  // Green,RED,BLUE
-        FastLED.show();
-        delay(100);   
-    }
     delay(100);
-    leds[4][1] = CRGB(75,214,6);  // Green,RED,BLUE
-    delay(200);
-    leds[4][1] = CRGB(0,0,0);  // Green,RED,BLUE
-    leds[3][6] = CRGB(0,0,0);  // Green,RED,BLUE
-    FastLED.show();
-    delay(10);
     Serial.println("Process 4 finished");
+    
 }
+
 
 // process 5----------------------------------------------
 int process5()
@@ -269,6 +271,7 @@ int process5()
     for(i=5;i<76;i++)
     {
         leds[1][i] = CRGB(75,214,6);  // Green,RED,BLUE // 72 led
+        
         leds[3][j] = CRGB(75,214,6);    // 75 leds
         leds[4][k] = CRGB(75,214,6);
         leds[7][l] = CRGB(75,214,6);
@@ -647,22 +650,26 @@ int process13()
     Wire.endTransmission();       // sending value to arduino 2
     delay(50);
     i = 80;
-    for(i=80;i>60;i--)
+    j = 0;
+    for(i=80;i>65;i--)
     {
         leds[7][i] = CRGB(0,75,0);
+        leds[5][j] = CRGB(0,75,0);
         FastLED.show();
-        delay(70); 
+        delay(120); 
+        j++;
     }
-    for(i=80;i>60;i--)
+    delay(960);
+    j = 0;
+    for(i=80;i>65;i--)
     {
         leds[7][i] = CRGB(0,0,0);
+        leds[5][j] = CRGB(0,0,0);
         FastLED.show();
-        delay(70); 
+        delay(120);
+        j++;
     }
 
-
-
-    
     for(i=0;i<200;i++)
     {
         slaveStatus = digitalRead(slaveReady);
