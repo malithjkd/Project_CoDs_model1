@@ -123,12 +123,15 @@ void setup() {
 
 void loop(){
     
-    //process1();
-    //process2();
-    //process3();
+    process1();
+    process2();
+    process3();
     process4();
+    
+    Wire.beginTransmission(9);    // sending value to arduino 2
+    Wire.write(0);                // sending value to arduino 2
+    Wire.endTransmission();       // sending value to arduino 2
     process5();
-/*
     
     Wire.beginTransmission(9);    // sending value to arduino 2
     Wire.write(0);                // sending value to arduino 2
@@ -175,8 +178,14 @@ void loop(){
     Wire.endTransmission();       // sending value to arduino 2
     delay(100);
     process13();
-    */
-    delay(2000);
+
+    Wire.beginTransmission(9);    // sending value to arduino 2
+    Wire.write(0);                // sending value to arduino 2
+    Wire.endTransmission();       // sending value to arduino 2
+    delay(100);
+    process14();
+    
+    process15();
 
 }//end of loop
 
@@ -189,15 +198,14 @@ int process1()
     {
         leds[0][i] = CRGB(110,125,0);  // Green,RED,BLUE
         FastLED.show();
-        delay(50);
-        leds[0][i-1] = CRGB(0,0,0);  // Green,RED,BLUE
-        FastLED.show();
-        delay(10);  
+        delay(50);  
     }
-    leds[0][36] = CRGB(0,0,0);  // Green,RED,BLUE
-    FastLED.show();
-    delay(10);  
-    
+    for(i=0;i<37;i++)
+    {
+        leds[0][i] = CRGB(0,0,0);  // Green,RED,BLUE
+        FastLED.show();
+        delay(50);
+    }
 }
 
 int process2()
@@ -243,7 +251,10 @@ int process4()
     delay(500);
     for(i=0;i<12;i++)
     {
-        leds[1][i/3] = CRGB(0,0,0);  // Green,RED,BLUE  
+        if(i<10)
+        {
+            leds[1][i/2] = CRGB(0,0,0);  // Green,RED,BLUE  
+        }
         if(i<5)
         {
             leds[2][i] = CRGB(0,0,0);  // Green,RED,BLUE
@@ -265,27 +276,64 @@ int process4()
 int process5()
 {
     Serial.println("Process 5 starts");
-    j=7;
-    k=68;
-    l=0;
-    for(i=5;i<76;i++)
+    
+    for(i=0;i<=67;i++)
     {
-        leds[1][i] = CRGB(75,214,6);  // Green,RED,BLUE // 72 led
+        leds[1][i+5] = CRGB(37,107,3);
         
-        leds[3][j] = CRGB(75,214,6);    // 75 leds
-        leds[4][k] = CRGB(75,214,6);
-        leds[7][l] = CRGB(75,214,6);
+        j = i+35;
+        if(i<32)
+        {
+            leds[7][j] = CRGB(37,107,3);
+            
+        }else
+        {
+            leds[7][j-67] = CRGB(37,107,3);
+        }
+       
+        leds[3][i+7] = CRGB(37,107,3); 
+        leds[4][68-i] = CRGB(37,107,3);
+        
         FastLED.show();
         delay(20);
-        leds[1][i-1] = CRGB(0,0,0);  // Green,RED,BLUE
-        leds[3][j-1] = CRGB(0,0,0);
-        leds[4][k+1] = CRGB(0,0,0);
-        leds[7][l-1] = CRGB(0,0,0);
+    }
+
+    Serial.println("Process 16 starts");
+    Wire.beginTransmission(9);    // sending value to arduino 2
+    Wire.write(9);                // sending value to arduino 2
+    Wire.endTransmission();       // sending value to arduino 2
+    delay(50);
+    for(i=0;i<20;i++)
+    {
+        slaveStatus = digitalRead(slaveReady);
+        Serial.println(slaveStatus);
+        if (slaveStatus > 0)
+        {
+            break;  
+        }
+        delay(500);
+    }
+    Serial.println("Process 16 ends");
+
+
+    for(i=0;i<=67;i++)
+    {
+        leds[1][i+5] = CRGB(0,0,0);
+        if(i < 62)
+        {
+            leds[7][i+5] = CRGB(0,0,0);  
+        }
+        else if(i >=62)
+        {
+            leds[7][i-62] = CRGB(0,0,0);
+        }
+        
+        
+        leds[3][i+7] = CRGB(0,0,0);
+        leds[4][68-i] = CRGB(0,0,0);
+        
         FastLED.show();
         delay(20);
-        j++;
-        k--;
-        l++;
     }
     Serial.println("Process 5 ends");
 }
@@ -681,4 +729,35 @@ int process13()
         delay(50);
     }
     Serial.println("Process 13 ends");
+}
+
+int process14()
+{
+    Serial.println("Process 14 starts");
+    Wire.beginTransmission(9);    // sending value to arduino 2
+    Wire.write(8);                // sending value to arduino 2
+    Wire.endTransmission();       // sending value to arduino 2
+    delay(50);
+    for(i=0;i<200;i++)
+    {
+        slaveStatus = digitalRead(slaveReady);
+        Serial.println(slaveStatus);
+        if (slaveStatus > 0)
+        {
+            break;  
+        }
+        delay(50);
+    }
+    Serial.println("Process 14 ends");
+}
+
+
+// process 15--------------------------------------------------
+int process15()
+{
+    Serial.println("Process 15 starts");
+    digitalWrite(relay4, LOW);
+    delay(relay_delay);
+    digitalWrite(relay4, HIGH);
+    Serial.println("Process 15 ends");
 }
