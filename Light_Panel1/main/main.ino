@@ -122,7 +122,7 @@ void setup() {
 }
 
 void loop(){
-    
+     
     process1();
     process2();
     process3();
@@ -131,7 +131,9 @@ void loop(){
     Wire.beginTransmission(9);    // sending value to arduino 2
     Wire.write(0);                // sending value to arduino 2
     Wire.endTransmission();       // sending value to arduino 2
+    delay(100);
     process5();
+
     
     Wire.beginTransmission(9);    // sending value to arduino 2
     Wire.write(0);                // sending value to arduino 2
@@ -187,6 +189,8 @@ void loop(){
     
     process15();
 
+    delay(2000);
+    
 }//end of loop
 
 // process declaration
@@ -276,6 +280,24 @@ int process4()
 int process5()
 {
     Serial.println("Process 5 starts");
+
+    Serial.println("Process 16 starts");
+    Wire.beginTransmission(9);    // sending value to arduino 2
+    Wire.write(9);                // sending value to arduino 2
+    Wire.endTransmission();       // sending value to arduino 2
+    delay(100);
+    
+    for(i=0;i<20;i++)
+    {
+        slaveStatus = digitalRead(slaveReady);
+        Serial.println(slaveStatus);
+        if (slaveStatus > 0)
+        {
+            break;  
+        }
+        delay(500);
+    }
+    Serial.println("Process 16 ends");
     
     for(i=0;i<=67;i++)
     {
@@ -295,30 +317,23 @@ int process5()
         leds[4][68-i] = CRGB(37,107,3);
         
         FastLED.show();
-        delay(20);
+        delay(25);
     }
-
-    Serial.println("Process 16 starts");
-    Wire.beginTransmission(9);    // sending value to arduino 2
-    Wire.write(9);                // sending value to arduino 2
-    Wire.endTransmission();       // sending value to arduino 2
-    delay(50);
-    for(i=0;i<20;i++)
+    /*
+     * To calcluate the values of each and every item I calulate and identyfied sequance of the oparetion.
+     * There might be some maths to calcuate this type of things. 
+     * Hear we are just calcuate it by trial and error. It takes time, But it works.
+     */
+    for(i=0;i<=77;i++)
     {
-        slaveStatus = digitalRead(slaveReady);
-        Serial.println(slaveStatus);
-        if (slaveStatus > 0)
+        if(i<=29)
         {
-            break;  
+            leds[1][i+42] = CRGB(0,0,0);  
+        }else if(i>29)
+        {
+            leds[1][i-25] = CRGB(0,0,0);
         }
-        delay(500);
-    }
-    Serial.println("Process 16 ends");
 
-
-    for(i=0;i<=67;i++)
-    {
-        leds[1][i+5] = CRGB(0,0,0);
         if(i < 62)
         {
             leds[7][i+5] = CRGB(0,0,0);  
@@ -328,12 +343,24 @@ int process5()
             leds[7][i-62] = CRGB(0,0,0);
         }
         
+        if(i<39)
+        {
+            leds[3][i+45] = CRGB(0,0,0);
+        }else if(i>=39)
+        {
+            leds[3][i-32] = CRGB(0,0,0);
+        }
+        if(i<31)
+        {
+            leds[4][31-i] = CRGB(0,0,0);  
+        }else if(i>=31)
+        {
+            leds[4][99-i] = CRGB(0,0,0);  
+        }
         
-        leds[3][i+7] = CRGB(0,0,0);
-        leds[4][68-i] = CRGB(0,0,0);
         
         FastLED.show();
-        delay(20);
+        delay(25);
     }
     Serial.println("Process 5 ends");
 }
