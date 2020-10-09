@@ -1,3 +1,8 @@
+#include <Wire.h>
+#include <FastLED.h>
+#include <IRremote.h>
+#include <ir_Lego_PF_BitStreamEncoder.h>
+
 /*  Malith JKD
  *  06.10.2020
  *
@@ -19,18 +24,29 @@
  *  process 16 - pipe line: slug pump building to oxidation ditch(weight line)
  */
  
-#include <Wire.h>
-#include <FastLED.h>
-
+// define veriables for led oparetions
 #define NUM_STRIPS 10
 #define NUM_LEDS 98
 #define CLOCK_PIN 13
+
+
+// define veriables for ir remote operation
+#define first_key 41565
+#define first_key_ex 9755
+
+#define second_key 25245
+#define second_key_ex 7611
+
+// Input pins
+int receiver_pin = 49;
 
 // communication
 int x = 0;
 int slaveReady = 53;
 
 // function decleration
+int AutoSequance();
+int ManualSequance();
 int process1();
 int process2();
 int process3();
@@ -50,7 +66,7 @@ int process15();
 // velriable diclaration for led 
 CRGB leds[NUM_STRIPS][NUM_LEDS];
 
-// velriable diclaration for process 
+// velriable for light diclaration oparation
 int i = 0;
 int j = 0;
 int k = 0;
@@ -78,17 +94,28 @@ int relay6 = 29;
 int relay7 = 26;
 int relay8 = 27;
 
-// velriable diclaration for relay operation
-int relay_delay = 1500;
 
 // velriable diclaration slave status
 int slaveStatus = 0;
+
+// IR remot output veriable
+unsigned int value;
+
+// manua function veriation
+int manualOn = 0;
+int processNow = 0;
+
+// functions for IRremote
+IRrecv receiver(receiver_pin);
+decode_results output;
 
 
 void setup() {
     Wire.begin(); 
     Serial.begin(9600);
-    
+
+    receiver.enableIRIn();
+
     pinMode(slaveReady, INPUT);
     
     pinMode(relay1, OUTPUT);    // precess 2
@@ -121,8 +148,297 @@ void setup() {
 
 }
 
-void loop(){
-     
+void loop()
+{    
+    if (receiver.decode(&output)) 
+    {
+        value = output.value;
+        Serial.println(value);
+        if(value == 41565 )
+        {
+            // auto sequance botton pressed
+            manualOn = 0;
+            processNow = 0;
+            AutoSequance();
+        }else if(value == 57885)
+        {
+            // manual oparation button pressed
+            manualOn = 1;
+            processNow = 0;
+        }else if(value == 8925)   // << button
+        {
+            // manual oparation button pressed
+            if(manualOn == 1)
+            {
+                  processNow = processNow -1;
+                  ManualSequance();
+            }
+            
+        }else if(value == 49725)  // >> button
+        {
+            // manual oparation button pressed
+            if(manualOn == 1)
+            {
+                  processNow = processNow + 1;
+                  ManualSequance();
+            }    
+        }else if(value == 57375)  //  1
+        {
+            // manual oparation button pressed
+            if(manualOn == 1)
+            {
+                process1();
+            }    
+        }else if(value == 43095)  //  2
+        {
+            // manual oparation button pressed
+            if(manualOn == 1)
+            {
+                process2();
+            }    
+        }else if(value == 36975)  //  3
+        {
+            // manual oparation button pressed
+            if(manualOn == 1)
+            {
+                process3();
+            }    
+        }else if(value == 26775)  //  4
+        {
+            // manual oparation button pressed
+            if(manualOn == 1)
+            {
+                process4();
+            }    
+        }else if(value == 39015)  //  5
+        {
+            // manual oparation button pressed
+            if(manualOn == 1)
+            {
+                Wire.beginTransmission(9);    // sending value to arduino 2
+                Wire.write(0);
+                Wire.endTransmission();
+                delay(100);
+                process5();
+            }    
+        }else if(value == 45135)  //  6
+        {
+            // manual oparation button pressed
+            if(manualOn == 1)
+            {
+                Wire.beginTransmission(9);    // sending value to arduino 2
+                Wire.write(0);
+                Wire.endTransmission();
+                delay(100);
+                process6();
+            }    
+        }else if(value == 12495)  //  7
+        {
+            // manual oparation button pressed
+            if(manualOn == 1)
+            {
+                Wire.beginTransmission(9);    // sending value to arduino 2
+                Wire.write(0);
+                Wire.endTransmission();
+                delay(100);
+                process7();
+            }    
+        }else if(value == 6375)  //  8
+        {
+            // manual oparation button pressed
+            if(manualOn == 1)
+            {
+                Wire.beginTransmission(9);    // sending value to arduino 2
+                Wire.write(0);
+                Wire.endTransmission();
+                delay(100);
+                process8();
+            }    
+        }else if(value == 31365)  //  9
+        {
+            // manual oparation button pressed
+            if(manualOn == 1)
+            {
+                Wire.beginTransmission(9);    // sending value to arduino 2
+                Wire.write(0);
+                Wire.endTransmission();
+                delay(100);
+                process9();
+            }    
+        }else if(value == 4335)  //  10
+        {
+            // manual oparation button pressed
+            if(manualOn == 1)
+            {
+                Wire.beginTransmission(9);    // sending value to arduino 2
+                Wire.write(0);
+                Wire.endTransmission();
+                delay(100);
+                process10();
+            }    
+        }else if(value == 14535)  //  11
+        {
+            // manual oparation button pressed
+            if(manualOn == 1)
+            {
+                Wire.beginTransmission(9);    // sending value to arduino 2
+                Wire.write(0);
+                Wire.endTransmission();
+                delay(100);
+                process11();
+            }    
+        }else if(value == 23205)  //  12
+        {
+            // manual oparation button pressed
+            if(manualOn == 1)
+            {
+                Wire.beginTransmission(9);    // sending value to arduino 2
+                Wire.write(0);
+                Wire.endTransmission();
+                delay(100);
+                process12();
+            }    
+        }else if(value == 17085)  //  13
+        {
+            // manual oparation button pressed
+            if(manualOn == 1)
+            {
+                Wire.beginTransmission(9);    // sending value to arduino 2
+                Wire.write(0);
+                Wire.endTransmission();
+                delay(100);
+                process13();
+            }    
+        }else if(value == 19125)  //  14
+        {
+            // manual oparation button pressed
+            if(manualOn == 1)
+            {
+                Wire.beginTransmission(9);    // sending value to arduino 2
+                Wire.write(0);
+                Wire.endTransmission();
+                delay(100);
+                process14();
+            }    
+        }else if(value == 21165)  //  15
+        {
+            // manual oparation button pressed
+            if(manualOn == 1)
+            {
+                Wire.beginTransmission(9);    // sending value to arduino 2
+                Wire.write(0);
+                Wire.endTransmission();
+                delay(100);
+                process15();
+            }    
+        }
+        
+        receiver.resume();
+        delay(100);
+        
+    }//end of if function for remote operation
+    
+}//end of loop
+
+// process declaration
+
+int ManualSequance()
+{
+    if(processNow == 1 )
+        {
+            process1();
+        }else if(processNow == 2)
+        {
+            process2();
+        }else if(processNow == 3)
+        {
+            process3();
+        }else if(processNow == 4)
+        {
+            process4();
+        }else if(processNow == 5)
+        {
+            Wire.beginTransmission(9);    // sending value to arduino 2
+            Wire.write(0);
+            Wire.endTransmission();
+            delay(100);
+            process5();
+        }else if(processNow == 6)
+        {
+            Wire.beginTransmission(9);    // sending value to arduino 2
+            Wire.write(0); 
+            Wire.endTransmission();
+            delay(100);
+            process6();
+        }else if(processNow == 7)
+        {
+            Wire.beginTransmission(9);    // sending value to arduino 2
+            Wire.write(0);
+            Wire.endTransmission();
+            delay(100);
+            process7();
+        }else if(processNow == 8)
+        {
+            Wire.beginTransmission(9);    // sending value to arduino 2
+            Wire.write(0);
+            Wire.endTransmission();
+            delay(100);
+            process8();
+        }else if(processNow == 9)
+        {
+            Wire.beginTransmission(9);    // sending value to arduino 2
+            Wire.write(0);
+            Wire.endTransmission();
+            delay(100);
+            process9();
+        }else if(processNow == 10)
+        {
+            Wire.beginTransmission(9);    // sending value to arduino 2
+            Wire.write(0);
+            Wire.endTransmission();
+            delay(100);
+            process10();
+        }else if(processNow == 11)
+        {
+            Wire.beginTransmission(9);    // sending value to arduino 2
+            Wire.write(0);
+            Wire.endTransmission();
+            delay(100);
+            process11();
+        }else if(processNow == 12)
+        {
+            Wire.beginTransmission(9);    // sending value to arduino 2
+            Wire.write(0);
+            Wire.endTransmission();
+            delay(100);
+            process12();
+        }else if(processNow == 13)
+        {
+            Wire.beginTransmission(9);    // sending value to arduino 2
+            Wire.write(0);
+            Wire.endTransmission();
+            delay(100);
+            process13();
+        }else if(processNow == 14)
+        {
+            Wire.beginTransmission(9);    // sending value to arduino 2
+            Wire.write(0);
+            Wire.endTransmission();
+            delay(100);
+            process14();
+        }else if(processNow == 15)
+        {
+            Wire.beginTransmission(9);    // sending value to arduino 2
+            Wire.write(0);
+            Wire.endTransmission();
+            delay(100);
+            process15();
+        }
+}
+
+
+int AutoSequance()
+{
     process1();
     process2();
     process3();
@@ -189,11 +505,8 @@ void loop(){
     
     process15();
 
-    delay(2000);
-    
-}//end of loop
-
-// process declaration
+    delay(2000); 
+}
 
 
 int process1()
@@ -216,7 +529,7 @@ int process2()
 {
     Serial.println("Process 2 starts");
     digitalWrite(relay1, LOW);
-    delay(relay_delay);
+    delay(1500);
     digitalWrite(relay1, HIGH);
     Serial.println("Process 2 finished");
 }
@@ -225,9 +538,9 @@ int process3()
 {
     Serial.println("Process 3 starts");
     digitalWrite(relay2, LOW);
-    delay(relay_delay);
+    delay(1500);
     digitalWrite(relay2, HIGH);
-    //delay(relay_delay);
+    //delay(1500);
     Serial.println("Process 3 finished");
   
 }
@@ -709,7 +1022,7 @@ int process12()
 {
     Serial.println("Process 12 starts");
     digitalWrite(relay3, LOW);
-    delay(relay_delay);
+    delay(1500);
     digitalWrite(relay3, HIGH);
     Serial.println("Process 11 ends");
 }
@@ -784,7 +1097,7 @@ int process15()
 {
     Serial.println("Process 15 starts");
     digitalWrite(relay4, LOW);
-    delay(relay_delay);
+    delay(1500);
     digitalWrite(relay4, HIGH);
     Serial.println("Process 15 ends");
 }
