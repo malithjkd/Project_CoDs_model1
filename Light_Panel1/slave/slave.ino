@@ -28,7 +28,6 @@
 // Define the array of leds
 CRGB leds[NUM_STRIPS][NUM_LEDS];
 
-
 int i = 0;
 int j = 0;
 int k = 0;
@@ -423,11 +422,16 @@ int process10()
         FastLED.show();
         delay(15);
 
-        leds[1][i-1] = CRGB(0,0,0);  // Green,RED,BLUE
+        leds[1][i-2] = CRGB(0,0,0);  // Green,RED,BLUE
         FastLED.show();
-        delay(10);
+        delay(15);
     }
-}
+    leds[1][98] = CRGB(0,0,0);
+    leds[1][99] = CRGB(0,0,0);
+    leds[1][100] = CRGB(0,0,0);
+    FastLED.show();
+    delay(10);
+} 
 
 //  process 11 - pipe line: sedimentation tank to slug pump building 
 int process11()
