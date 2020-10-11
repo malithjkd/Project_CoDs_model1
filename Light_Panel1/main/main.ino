@@ -1,11 +1,27 @@
-#include <Wire.h>
-#include <FastLED.h>
-#include <IRremote.h>
-#include <ir_Lego_PF_BitStreamEncoder.h>
-
 /*  Malith JKD
- *  06.10.2020
- *
+ *  11.10.2020
+ *  
+ * 	Main takes input from te IR Remote and work accordinly
+ * 	Main(arduino)	IR reader LED
+ *	49 -------------49
+ *  
+ * 	Light panel woks with 2 arduinos megas, Main arduino and Slave arduino.
+ *  Main arduino Slave arduino communication via I2C using pin no 20 and 21
+ *	Main			Slave
+ *  20 -------------20
+ *	21 -------------21
+ * 
+ *  Light panel and plant Phyiscal plant model communicate via wifi using pings 31,33,35 and 37.
+ *	Main(arduino) 	Wifi(esp8266)
+ * 	31 -------------D2
+ *  33 -------------D1
+ *  35 -------------D3
+ *  37 -------------D4
+ * 
+ *  Main function collectc IR remote signal and derects to led illumination automatic and manual functions.
+ * 	inside manual or automat function they calles to indivirual process functions to do the final operatin of the function.
+ *  
+ *  Indivirual process functions are list in the bellow.
  *  process 1 - pipe line: sewage line incomming
  *  process 2 - Mesuring building
  *  process 3 - pilimenary treatment building
@@ -16,31 +32,32 @@
  *  process 8 - pipe line: sedimentation tank to disinfection building
  *  process 9 - disinfection building
  *  process 10 - pipe line: Treated effluent
- *  process 11 - pipe line: sedimentation tank to slug pump building 
+ *  process 11 - pipe line: sedimentation tank to slug pump building(red line) 
  *  process 12 - slug pump building
  *  process 13 - pipe line: slug pump building to oxidation tank
  *  process 14 - pipe line: slug pump building to slug treatment building(red line)
  *  process 15 - slug treatment building
- *  process 16 - pipe line: slug pump building to oxidation ditch(weight line)
+ *  process 16 - pipe line: slug pump building to oxidation ditch(air line)
+ *
+ *	Bulbs are defined is a indivirual veriable using metrix.
+ *	Bulbs arreys pins defines in 
+ *
  */
- 
+
+#include <Wire.h>
+#include <FastLED.h>
+#include <IRremote.h>
+#include <ir_Lego_PF_BitStreamEncoder.h>
+
 // define veriables for led oparetions
 #define NUM_STRIPS 10
 #define NUM_LEDS 98
 #define CLOCK_PIN 13
 
-
-// define veriables for ir remote operation
-#define first_key 41565
-#define first_key_ex 9755
-
-#define second_key 25245
-#define second_key_ex 7611
-
 // Input pins
 int receiver_pin = 49;
 
-// communication
+// communication veriable decleration
 int x = 0;
 int slaveReady = 53;
 
@@ -94,7 +111,6 @@ int relay6 = 29;
 int relay7 = 26;
 int relay8 = 27;
 
-
 // velriable diclaration slave status
 int slaveStatus = 0;
 
@@ -105,23 +121,28 @@ unsigned int value;
 int manualOn = 0;
 int processNow = 0;
 
+// wifi input veriables;
+int D4 = 37;
+int D3 = 35;
+int D2 = 31;
+int D1 = 33;
+
 // functions for IRremote
 IRrecv receiver(receiver_pin);
 decode_results output;
 
 
 void setup() {
-    Wire.begin(); 
-    Serial.begin(9600);
-
-    receiver.enableIRIn();
+    Wire.begin(); 				// for I2C communication
+    Serial.begin(9600);			// for SerialPrinting
+    receiver.enableIRIn();		// for IR reading
 
     pinMode(slaveReady, INPUT);
     
     pinMode(relay1, OUTPUT);    // precess 2
     pinMode(relay2, OUTPUT);    // precess 3
-    pinMode(relay3, OUTPUT);
-    pinMode(relay4, OUTPUT);
+    pinMode(relay3, OUTPUT);	// precess 12
+    pinMode(relay4, OUTPUT);	// precess 15
     pinMode(relay5, OUTPUT);
     pinMode(relay6, OUTPUT);
     pinMode(relay7, OUTPUT);
@@ -135,17 +156,27 @@ void setup() {
     digitalWrite(relay7, HIGH);
     digitalWrite(relay8, HIGH);
 
-    FastLED.addLeds<WS2812B, 2, RGB>(leds[0], 40);  // precess 1
-    FastLED.addLeds<WS2812B, 3, RGB>(leds[1], 90);  // Process 4  // process 5 - oxidation ditch
-    FastLED.addLeds<WS2812B, 4, RGB>(leds[2], NUM_LEDS);  // process 4  
-    FastLED.addLeds<WS2812B, 5, RGB>(leds[3], NUM_LEDS);  // process 4  // precess 5
-    FastLED.addLeds<WS2812B, 6, RGB>(leds[4], NUM_LEDS);  // process 4  // precess 5
-    FastLED.addLeds<WS2812B, 7, RGB>(leds[5], NUM_LEDS);  // process 11
-    FastLED.addLeds<WS2812B, 8, RGB>(leds[6], NUM_LEDS);                             // process 6  // process 7
-    FastLED.addLeds<WS2812B, 9, RGB>(leds[7], NUM_LEDS);                // process 5 // process 13
-    FastLED.addLeds<WS2812B, 10, RGB>(leds[8], NUM_LEDS);                            // process 6  // process 7
-    FastLED.addLeds<WS2812B, 11, RGB>(leds[9], NUM_LEDS);                            // process 6  // process 7
+    FastLED.addLeds<WS2812B, 2, RGB>(leds[0], 40);  		// precess 1
+    FastLED.addLeds<WS2812B, 3, RGB>(leds[1], 90);  		// Process 4  	// process 5 - oxidation ditch
+    FastLED.addLeds<WS2812B, 4, RGB>(leds[2], NUM_LEDS);  	// process 4  
+    FastLED.addLeds<WS2812B, 5, RGB>(leds[3], NUM_LEDS);  	// process 4  	// precess 5
+    FastLED.addLeds<WS2812B, 6, RGB>(leds[4], NUM_LEDS);  	// process 4  	// precess 5
+    FastLED.addLeds<WS2812B, 7, RGB>(leds[5], NUM_LEDS);  	// process 11
+    FastLED.addLeds<WS2812B, 8, RGB>(leds[6], NUM_LEDS);    // process 6  	// process 7
+    FastLED.addLeds<WS2812B, 9, RGB>(leds[7], NUM_LEDS);    // process 5	// process 13
+    FastLED.addLeds<WS2812B, 10, RGB>(leds[8], NUM_LEDS);   // process 6  	// process 7
+    FastLED.addLeds<WS2812B, 11, RGB>(leds[9], NUM_LEDS);   // process 6  	// process 7
 
+    pinMode(D4, OUTPUT);    //3
+    pinMode(D3, OUTPUT);    //2
+    pinMode(D2, OUTPUT);    //1
+    pinMode(D1, OUTPUT);    //0
+
+    // making wifi  communication digital outputs to zero
+    digitalWrite(D3, LOW);
+    digitalWrite(D2, LOW);
+    digitalWrite(D1, LOW);
+    digitalWrite(D4, LOW);
 }
 
 void loop()
@@ -536,6 +567,11 @@ int process2()
 
 int process3()
 {
+    digitalWrite(D4, LOW);  
+    digitalWrite(D3, LOW);
+    digitalWrite(D2, HIGH);
+    digitalWrite(D1, HIGH);
+    
     Serial.println("Process 3 starts");
     digitalWrite(relay2, LOW);
     delay(1500);
@@ -593,6 +629,10 @@ int process4()
 int process5()
 {
     Serial.println("Process 5 starts");
+    digitalWrite(D4, LOW);  
+    digitalWrite(D3, HIGH);
+    digitalWrite(D2, LOW);
+    digitalWrite(D1, HIGH);
 
     Serial.println("Process 16 starts");
     Wire.beginTransmission(9);    // sending value to arduino 2
@@ -760,6 +800,11 @@ int process6()
 int process7()
 {
     Serial.println("Process 7 starts");
+
+    digitalWrite(D4, LOW);  
+    digitalWrite(D3, HIGH);
+    digitalWrite(D2, HIGH);
+    digitalWrite(D1, HIGH);
     
     Wire.beginTransmission(9);    // sending value to arduino 2
     Wire.write(2);                // sending value to arduino 2
@@ -861,7 +906,7 @@ int process7()
             u = r;
         }else
         {
-            u = r -28;  
+            u = r - 28;  
         }
         leds[6][n] = CRGB(10,10,100);
         leds[8][a] = CRGB(10,10,100);
@@ -954,6 +999,14 @@ int process8()
 int process9()
 {
     Serial.println("Process 9 starts");
+
+    //Sending input to wifi
+    digitalWrite(D4, HIGH);  
+    digitalWrite(D3, LOW);
+    digitalWrite(D2, LOW);
+    digitalWrite(D1, HIGH);
+
+    // Sending input to 
     Wire.beginTransmission(9);    // sending value to arduino 2
     Wire.write(4);                // sending value to arduino 2
     Wire.endTransmission();       // sending value to arduino 2
@@ -977,6 +1030,14 @@ int process9()
 int process10()
 {
     Serial.println("Process 10 starts");
+
+    // sending signal to wifi
+    digitalWrite(D4, HIGH);  
+    digitalWrite(D3, LOW);
+    digitalWrite(D2, HIGH);
+    digitalWrite(D1, LOW);
+
+    // sending signal to slave ardino via I2C.
     Wire.beginTransmission(9);    // sending value to arduino 2
     Wire.write(5);                // sending value to arduino 2
     Wire.endTransmission();       // sending value to arduino 2
@@ -996,7 +1057,7 @@ int process10()
 
 
 // process 11--------------------------------------------------
-
+//(red line)
 int process11()
 {
     Serial.println("Process 11 starts");
@@ -1020,6 +1081,12 @@ int process11()
 // process 12--------------------------------------------------
 int process12()
 {
+    // sending signal to wifi
+    digitalWrite(D4, HIGH);  
+    digitalWrite(D3, HIGH);
+    digitalWrite(D2, LOW);
+    digitalWrite(D1, LOW);
+
     Serial.println("Process 12 starts");
     digitalWrite(relay3, LOW);
     delay(1500);
@@ -1095,6 +1162,13 @@ int process14()
 // process 15--------------------------------------------------
 int process15()
 {
+	// sending signal to wifi
+    digitalWrite(D4, HIGH);  
+    digitalWrite(D3, HIGH);
+    digitalWrite(D2, HIGH);
+    digitalWrite(D1, HIGH);
+
+    // sending signal to slave ardino via I2C.
     Serial.println("Process 15 starts");
     digitalWrite(relay4, LOW);
     delay(1500);
