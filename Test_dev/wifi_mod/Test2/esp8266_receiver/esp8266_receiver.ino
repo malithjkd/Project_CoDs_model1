@@ -1,3 +1,4 @@
+
 /*
  Wifi siglnal receiver module
  To establish the communication bitween two divices using wifi technology we use ESP8266 module D1 Mini.
@@ -25,7 +26,8 @@ const char *password  = "password";
 int sensorValue0 = 0;        
 int sensorValue1 = 0;        
 int sensorValue2 = 0;        
-int sensorValue3 = 0;        
+int sensorValue3 = 0;
+int sensorValue4 = 0;           
 String sensor_values;
 
 ESP8266WebServer server(80);
@@ -37,26 +39,28 @@ void handleSentVar() {
     sensor_values = server.arg("sensor_reading");
     Serial.println(sensor_values);
   }
+
   JsonObject& root = jsonBuffer.parseObject(sensor_values);
-  if (!root.success()) {//
-    Serial.println("parseObject() failed");//
-    return;//
-  }//
-  if (root.success())//
-  {//
-    sensorValue0          = root["sensor0_reading"].as<int>();
-    sensorValue1          = root["sensor1_reading"].as<int>();
-    sensorValue2          = root["sensor2_reading"].as<int>();
-    sensorValue3          = root["sensor3_reading"].as<int>();
+  
+  if (!root.success()) {
+    Serial.println("parseObject() failed");
+    ESP.restart();
+    return;
+  }
+  
+  if (root.success())
+  {
+    sensorValue4 = root["s4r"].as<int>();
+  }
 
-  }//
+  Serial.println(sensorValue4);
+  
+  //Serial.println(sensorValue0);
+  //Serial.println(sensorValue1);
+  //Serial.println(sensorValue2);
+  //Serial.println(sensorValue3);
 
-  Serial.println(sensorValue0);
-  Serial.println(sensorValue1);
-  Serial.println(sensorValue2);
-  Serial.println(sensorValue3);
-
-  toggle_leds();
+  //toggle_leds();
 
   server.send(200, "text/html", "Data received");
 }
@@ -72,7 +76,7 @@ void setup() {
   pinMode(led2, OUTPUT);
   pinMode(led3, OUTPUT);
   
-  //toggle_leds();                              //turn off all leds as all the sensor values are zero
+  toggle_leds();                              //turn off all leds as all the sensor values are zero
   
   server.on("/data/", HTTP_GET, handleSentVar); // when the server receives a request with /data/ in the string then run the handleSentVar function
   server.begin();

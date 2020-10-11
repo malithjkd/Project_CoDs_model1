@@ -1,3 +1,29 @@
+/*
+ * 05.10.2020
+ * malithjkd
+ * 
+ * Process floor lightpanel project for water board Kandy - Wast water treatemtne plant
+ * 
+ * process 1 - incomming from MC
+ * process 2 - incomming flow meater
+ * process 3 - piliminary process building
+ * process 4 - slug line to oxidation ditch
+ * process 5 - Oxidation ditch
+ * process 6 - sewge line to sedimentation tand
+ * process 7 - Sedimantation tand(round tank)
+ * process 8 - Trated water to disinfection tank
+ * process 9 - Disinfection Building
+ * process 10 - Treated Effluent Line
+ * process 11 - slug line from sedimentation line to slug pump blower builing
+ * process 12 - slug pump building
+ * process 13 - retuen sulg line to oxidation ditch
+ * process 14 - exess slug line to slug tratment building 
+ * process 15 - slug treatment buiding
+ * 
+ */
+
+
+
 #include <Wire.h>
 #include <FastLED.h>
 
@@ -21,7 +47,7 @@ int process7();
 int process8();
 int process9();
 int process10();  // good water out from the pump room
-int process11();  // slug collection from round tank to bulding
+int process11();  // slug collection from sedimentation(round tank) to bulding
 
 
 void setup() {
@@ -38,11 +64,11 @@ void setup() {
     FastLED.addLeds<WS2812B, 6, RGB>(leds[4], NUM_LEDS);  // process 14 *
     FastLED.addLeds<WS2812B, 7, RGB>(leds[5], NUM_LEDS);  // process 8 *
     FastLED.addLeds<WS2812B, 8, RGB>(leds[6], NUM_LEDS);  // pricess 13 *
-    FastLED.addLeds<WS2812B, 9, RGB>(leds[7], NUM_LEDS);  // ariation line for (==) tank **need to be tested
+    FastLED.addLeds<WS2812B, 9, RGB>(leds[7], NUM_LEDS);  // ariation line 1 15 * 
     FastLED.addLeds<WS2812B, 10, RGB>(leds[8], NUM_LEDS);  // **need to be tested
     FastLED.addLeds<WS2812B, 11, RGB>(leds[9], NUM_LEDS);  // **need to be tested
-    
-    
+    FastLED.addLeds<WS2812B, 12, RGB>(leds[10], NUM_LEDS);  // **need to be tested
+    FastLED.addLeds<WS2812B, 13, RGB>(leds[11], NUM_LEDS);  // **need to be tested
 }
 
 void receiveEvent(int bytes) {
@@ -51,10 +77,17 @@ void receiveEvent(int bytes) {
 
 void loop() 
 {
-
-    process11()
-    
-/*    if(x == 0)
+    process6();
+    process7();
+    process8();
+    process9();
+    process10();  // good water out from the pump room
+    process11(); 
+    process13(); 
+    process14();
+    process15(); 
+    /*
+    if(x == 0)
     {
         digitalWrite(slaveReady, LOW);            // slave is busy
         reset = 0;
@@ -137,7 +170,8 @@ void loop()
         delay(10);
     }
 
-*/
+    */
+    
 
 }   //end of loop
 
@@ -333,7 +367,7 @@ int process10()
 { 
     for(i=0;i<106;i++)
     {
-        leds[1][i] = CRGB(80,25,125);  // Green,RED,BLUE 1
+        leds[1][i] = CRGB(80,25,125);  // Green,RED,BLUE 
         FastLED.show();
         delay(15);
 
@@ -343,14 +377,24 @@ int process10()
     }
 }
 
+
+// process 11 - slug line from sedimentation line to slug pump blower builing---------
 int process11()
 {
+    for(i=0;i<8;i++)
+    {
+        leds[8][i] = CRGB(0,100,0);  // Green,RED,BLUE
+        FastLED.show();
+        delay(500);
+        leds[8][i-1] = CRGB(0,0,0);  // Green,RED,BLUE
+        FastLED.show();
+        delay(500);  
+    }
     
 }
 
-
 int process13(){
-    // process 13
+    // process 13 - retuen sulg line to oxidation ditch
     for(i=0;i<31;i++)
     {
         leds[6][i] = CRGB(50,50,50);  // Green,RED,BLUE
@@ -366,7 +410,7 @@ int process14(){
     // process 14
     for(i=0;i<69;i++)
     {
-        leds[4][i] = CRGB(0,125,5);  // Green,RED,BLUE
+        leds[4][i] = CRGB(0,125,0);  // Green,RED,BLUE
         FastLED.show();
         delay(15);
 
@@ -375,4 +419,19 @@ int process14(){
         delay(10);
     }
 
+}
+
+int process15() //oxidatio lie
+{
+    //  Oxidatioon line 15 -1 
+    for(i=0;i<8;i++)
+    {
+        leds[7][i] = CRGB(50,50,50);  // Green,RED,BLUE
+        FastLED.show();
+        delay(500);
+        leds[7][i-1] = CRGB(0,0,0);  // Green,RED,BLUE
+        FastLED.show();
+        delay(500);  
+    }
+    
 }

@@ -21,7 +21,8 @@ const char *password = "password";
 int sensorValue0 = 0;       //sensor value, I'm usingg 0/1 button state
 int sensorValue1 = 0;        
 int sensorValue2 = 0;        
-int sensorValue3 = 0;       
+int sensorValue3 = 0;
+int sensorValue4 = 0;  
 
 void setup() {
   Serial.begin(9600);
@@ -61,6 +62,7 @@ void loop() {
   sensorValue1 = 5;
   sensorValue2 = 4;
   sensorValue3 = 0;
+  sensorValue4 = 0;
 
   // Use WiFiClient class to create TCP connections
   WiFiClient client;
@@ -75,7 +77,7 @@ void loop() {
   // We now create a URI for the request. Something like /data/?sensor_reading=123
   String url = "/data/";
   url += "?sensor_reading=";
-  url +=  "{\"sensor0_dula\":\"sensor0_value\",\"sensor1_reading\":\"sensor1_value\",\"sensor2_reading\":\"sensor2_value\",\"sensor3_reading\":\"sensor3_value\"}";
+  url +=  "{\"sensor0_reading\":\"sensor0_value\"}";
 
   url.replace("sensor0_value", String(sensorValue0));
   url.replace("sensor1_value", String(sensorValue1));
