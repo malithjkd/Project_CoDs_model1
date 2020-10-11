@@ -85,111 +85,118 @@ void setup(){
 }
 
 void loop() {
-  if (receiver.decode(&output)) {
+	if (receiver.decode(&output)) {
     unsigned int value = output.value;
-    switch(value) {
-      case first_key:
-        Serial.println("Power off button");
-        if (digitalRead(13) == 1){
-          digitalWrite(13,LOW);
-          Serial.println("System status : Off");
-        }else {
-          digitalWrite(13,HIGH);
-          Serial.println("System status : ON");
-        }
-      break;
-      case first_key_ex:
-        Serial.println("Power off button");
-        if (digitalRead(13) == 1){
-          digitalWrite(13,LOW);
-          Serial.println("System status : Off");
-        }else {
-          digitalWrite(13,HIGH);
-          Serial.println("System status : ON");
-        }
-      break;
-      
-      case second_key:
-        Serial.println("Auto mode");
-        statusMode = 0;
-      break;
-      case second_key_ex:
-        Serial.println("Auto mode");
-        statusMode = 0;
-      break;
 
-      case thired_key:
-        Serial.println("Manual mode");
+    	switch(value) 
+    	{
+
+      		case first_key:
+        	Serial.println("Power off button");
+        	if (digitalRead(13) == 1)
+        	{
+          		digitalWrite(13,LOW);
+          		Serial.println("System status : Off");
+        	}else
+        	{
+          		digitalWrite(13,HIGH);
+          		Serial.println("System status : ON");
+        	}
+      		break;
+
+      		case first_key_ex:
+  			Serial.println("Power off button");
+        	if (digitalRead(13) == 1)
+        	{
+		        digitalWrite(13,LOW);
+		        Serial.println("System status : Off");
+	        }else {
+          digitalWrite(13,HIGH);
+          Serial.println("System status : ON");
+        }
       break;
       
-      case forth_key:
-        Serial.println("Go previous step <<");
-      break;
-      
-      case fifth_key:
-        Serial.println("Pause || ");
-      break;
-      
-      case sixth_key:
-        Serial.println("Go next step >>");
-      break;
-      
-      case seventh_key:
-        Serial.println("Process step 1 : Bad water input line");
-      break;
-      
-      case eighth_key:
-        Serial.println("Process step 2 : Bad water collecting");
-      break;
-      
-      case nineth_key:
-        Serial.println("Process step 3 : Grit classifier area");
-      break;
-      
-      case tenth_key:
-        Serial.println("Process step 4 : Pumping bad water to oxidation tank");
-      break;
-      
-      case eleventh_key:
-        Serial.println("Process step 5 : Oxidation ditch");
-      break;
-      
-      case twelveth_key:
-        Serial.println("Process step 6 : Pumping bad water to sedimentation tank");
-      break;
-      
-      case therteenth_key:
-        Serial.println("Process step 7 : Sedimentation tanks");
-      break;
-      
-      case foreteenth_key:
-        Serial.println("Process step 8 : Pumping sedimented water to disinfection building");
-      break;
-      
-      case fiftheeth_key:
-        Serial.println("Process step 9 : Disinfection building");
-      break;
-      
-      case sixteenthn_key:
-        Serial.println("Process step 10 : Clean water out");
-      break;
-      
-      case seventeenth_key:
-        Serial.println("Process step 11 : Slugffrom tanks to slug pump building");
-      break;
-      
-      case eighteenth_key:
-        Serial.println("Process step 12 : Slug pump building");
-      break;
-      case nineteenth_key:
-        Serial.println("Process step 13 : Pump water slug pump building to oxidation ditch");
-      break;
-      case twentieth_key:
-        Serial.println("Process step 14 : Pump slug to slug tratment building");
-      break;
-      case twentyone_key:
-        Serial.println("Process step 15 : Slug tratment building");
-      break;
+		      case second_key:
+		        Serial.println("Auto mode");
+		        statusMode = 0;
+		      break;
+		      case second_key_ex:
+		        Serial.println("Auto mode");
+		        statusMode = 0;
+		      break;
+
+		      case thired_key:
+		        Serial.println("Manual mode");
+		      break;
+		      
+		      case forth_key:
+		        Serial.println("Go previous step <<");
+		      break;
+		      
+		      case fifth_key:
+		        Serial.println("Pause || ");
+		      break;
+		      
+		      case sixth_key:
+		        Serial.println("Go next step >>");
+		      break;
+		      
+		      case seventh_key:
+		        Serial.println("Process step 1 : Bad water input line");
+		      break;
+		      
+		      case eighth_key:
+		        Serial.println("Process step 2 : Bad water collecting");
+		      break;
+		      
+		      case nineth_key:
+		        Serial.println("Process step 3 : Grit classifier area");
+		      break;
+		      
+		      case tenth_key:
+		        Serial.println("Process step 4 : Pumping bad water to oxidation tank");
+		      break;
+		      
+		      case eleventh_key:
+		        Serial.println("Process step 5 : Oxidation ditch");
+		      break;
+		      
+		      case twelveth_key:
+		        Serial.println("Process step 6 : Pumping bad water to sedimentation tank");
+		      break;
+		      
+		      case therteenth_key:
+		        Serial.println("Process step 7 : Sedimentation tanks");
+		      break;
+		      
+		      case foreteenth_key:
+		        Serial.println("Process step 8 : Pumping sedimented water to disinfection building");
+		      break;
+		      
+		      case fiftheeth_key:
+		        Serial.println("Process step 9 : Disinfection building");
+		      break;
+		      
+		      case sixteenthn_key:
+		        Serial.println("Process step 10 : Clean water out");
+		      break;
+		      
+		      case seventeenth_key:
+		        Serial.println("Process step 11 : Slugffrom tanks to slug pump building");
+		      break;
+		      
+		      case eighteenth_key:
+		        Serial.println("Process step 12 : Slug pump building");
+		      break;
+		      case nineteenth_key:
+		        Serial.println("Process step 13 : Pump water slug pump building to oxidation ditch");
+		      break;
+		      case twentieth_key:
+		        Serial.println("Process step 14 : Pump slug to slug tratment building");
+		      break;
+		      case twentyone_key:
+		        Serial.println("Process step 15 : Slug tratment building");
+		      break;
     } //end switch case
 
     Serial.println(value);
