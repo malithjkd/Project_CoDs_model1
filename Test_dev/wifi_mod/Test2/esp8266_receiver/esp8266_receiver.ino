@@ -13,10 +13,7 @@
 
 
 
-#define led0 16               //D0
-#define led1 5                //D1
-#define led2 4                //D2
-#define led3 0                //D3
+
 
 DynamicJsonBuffer jsonBuffer;
 
@@ -27,7 +24,8 @@ int sensorValue0 = 0;
 int sensorValue1 = 0;        
 int sensorValue2 = 0;        
 int sensorValue3 = 0;
-int sensorValue4 = 0;           
+int sensorValue4 = 0;
+           
 String sensor_values;
 
 ESP8266WebServer server(80);

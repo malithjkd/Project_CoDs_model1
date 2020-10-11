@@ -7,16 +7,8 @@
 
 #include <ESP8266WiFi.h>
 
-
-#define btn0 16
-#define btn1 5
-#define btn2 4
-#define btn3 0
-
-
 const char *ssid = "malithjkd";
 const char *password = "password";
-
 
 int sensorValue0 = 0;       //sensor value, I'm usingg 0/1 button state
 int sensorValue1 = 0;        
@@ -26,13 +18,13 @@ int sensorValue4 = 0;
 
 void setup() {
   Serial.begin(9600);
-  Serial.println("test1");
+  Serial.println("test1/ malith jkd ");
   delay(10);
 
-  pinMode(btn0, INPUT);
-  pinMode(btn1, INPUT);
-  pinMode(btn2, INPUT);
-  pinMode(btn3, INPUT);
+  pinMode(D1, INPUT);
+  pinMode(D2, INPUT);
+  pinMode(D3, INPUT);
+  pinMode(D4, INPUT);
 
 
   // set the ESP8266 to be a WiFi-client
@@ -46,24 +38,24 @@ void setup() {
 }
 
 void loop() {
-  /*
-  if(digitalRead(btn0) == LOW) sensorValue0 = 1;
-  if(digitalRead(btn1) == LOW) sensorValue1 = 1;
-  if(digitalRead(btn2) == LOW) sensorValue2 = 1;
-  if(digitalRead(btn3) == LOW) sensorValue3 = 1;
 
-  if(digitalRead(btn0) == HIGH) sensorValue0 = 0;
-  if(digitalRead(btn1) == HIGH) sensorValue1 = 1;
-  if(digitalRead(btn2) == HIGH) sensorValue2 = 0;
-  if(digitalRead(btn3) == HIGH) sensorValue3 = 0;
-  */
   
-  sensorValue0 = 1;
-  sensorValue1 = 5;
-  sensorValue2 = 4;
-  sensorValue3 = 0;
-  sensorValue4 = 0;
-
+  sensorValue0 = digitalRead(D1);
+  sensorValue1 = digitalRead(D2);
+  sensorValue2 = digitalRead(D3);
+  sensorValue3 = digitalRead(D4); 
+  Serial.println("sensorRead");
+  Serial.print(sensorValue0);
+  Serial.print(",");
+  Serial.print(sensorValue1);
+  Serial.print(",");
+  Serial.print(sensorValue2);
+  Serial.print(",");
+  Serial.print(sensorValue3);
+  
+  sensorValue4 = sensorValue3*8 + sensorValue2*4 + sensorValue1*2 + sensorValue0;
+  Serial.println(sensorValue4);
+  
   // Use WiFiClient class to create TCP connections
   WiFiClient client;
   const char * host = "192.168.4.1";            //default IP address
@@ -77,13 +69,9 @@ void loop() {
   // We now create a URI for the request. Something like /data/?sensor_reading=123
   String url = "/data/";
   url += "?sensor_reading=";
-  url +=  "{\"sensor0_reading\":\"sensor0_value\"}";
+  url +=  "{\"s4r\":\"sensor4_value\"}";
 
-  url.replace("sensor0_value", String(sensorValue0));
-  url.replace("sensor1_value", String(sensorValue1));
-  url.replace("sensor2_value", String(sensorValue2));
-  url.replace("sensor3_value", String(sensorValue3));
-
+  url.replace("sensor4_value", String(sensorValue4));
 
   // This will send the request to the server
   client.print(String("GET ") + url + " HTTP/1.1\r\n" + "Host: " + host + "\r\n" + "Connection: close\r\n\r\n");
