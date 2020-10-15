@@ -206,7 +206,7 @@ void loop()
     if (receiver.decode(&output)) 
     {
         value = output.value;
-        Serial.println(value);
+        Serial.println(value); // to get the IR values
         if(value == 41565 )
         {
             // auto sequance botton pressed
