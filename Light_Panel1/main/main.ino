@@ -39,9 +39,31 @@
  *  process 15 - slug treatment building
  *  process 16 - pipe line: slug pump building to oxidation ditch(air line)
  *
- *	Bulbs are defined is a indivirual veriable using metrix.
- *	Bulbs arreys pins defines in 
- *
+ *	Bulbs are defined is a indivirualy using veriable in 2D metrix.
+ *	Bulbs metix indiviually calles in process functions.
+ *  
+ *  wifi input from the main is program as below & remote control keys
+ *  ______________________________________________________________________
+ *     |digital  |Allocated prcess discription    |process    | Remote Control
+ *  No |4|3|2|1  |                                |allocated  | button allocated
+ *  ___|_________|________________________________|___________|_____________
+ *  0  | 0 0 0 0 | Nothing                        |
+ *  1  | 0 0 0 1 | Blue light                     |           | Program --> button1
+ *  2  | 0 0 1 0 | General ligts                  |           | Program --> button2
+ *  3  | 0 0 1 1 | Preliminary tretment building  | process3  | Manual --> button 3
+ *  4  | 0 1 0 0 | Auro process                   | all proc  | Auto process  
+ *  5  | 0 1 0 1 | Oxidation ditch                | process5  | Manual --> button 5
+ *  6  | 0 1 1 0 | 
+ *  7  | 0 1 1 1 | Sedimentation tank             | process7  | Manual --> button 7
+ *  8  | 1 0 0 0 | 
+ *  9  | 1 0 0 1 | Disinfection bilding           | process9  | Manual --> button 9
+ *  10 | 1 0 1 0 | Treated water line             | process10 | Manual --> button 10
+ *  11 | 1 0 1 1 |  
+ *  12 | 1 1 0 0 | slug pumb blower bilding       | process12 | Manual --> button 12
+ *  13 | 1 1 0 1 | 
+ *  14 | 1 1 1 0 | 
+ *  15 | 1 1 1 1 | Slug treatment building        | process15 | Manual --> button 15
+ *  
  */
 
 #include <Wire.h>
