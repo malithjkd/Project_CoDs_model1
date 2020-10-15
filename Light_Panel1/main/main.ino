@@ -48,14 +48,14 @@
  *  No |4|3|2|1  |                                |allocated  | button allocated
  *  ___|_________|________________________________|___________|_____________
  *  0  | 0 0 0 0 | Nothing                        |
- *  1  | 0 0 0 1 | Blue light                     |           | Program --> button1
- *  2  | 0 0 1 0 | General ligts                  |           | Program --> button2
+ *  1  | 0 0 0 1 | Blue light on                  |           | Program --> button1
+ *  2  | 0 0 1 0 | Blue light off                 |           | Program --> button2
  *  3  | 0 0 1 1 | Preliminary tretment building  | process3  | Manual --> button 3
  *  4  | 0 1 0 0 | Auro process                   | all proc  | Auto process  
  *  5  | 0 1 0 1 | Oxidation ditch                | process5  | Manual --> button 5
- *  6  | 0 1 1 0 | 
+ *  6  | 0 1 1 0 | Genereal light on              |           | Program --> button3
  *  7  | 0 1 1 1 | Sedimentation tank             | process7  | Manual --> button 7
- *  8  | 1 0 0 0 | 
+ *  8  | 1 0 0 0 | Genereal light off             |           | Program --> button4
  *  9  | 1 0 0 1 | Disinfection bilding           | process9  | Manual --> button 9
  *  10 | 1 0 1 0 | Treated water line             | process10 | Manual --> button 10
  *  11 | 1 0 1 1 |  
@@ -142,6 +142,7 @@ unsigned int value;
 // manua function veriation
 int manualOn = 0;
 int processNow = 0;
+int programMode = 0;
 
 // wifi input veriables;
 int D4 = 37;
@@ -163,8 +164,8 @@ void setup() {
     
     pinMode(relay1, OUTPUT);    // precess 2
     pinMode(relay2, OUTPUT);    // precess 3
-    pinMode(relay3, OUTPUT);	// precess 12
-    pinMode(relay4, OUTPUT);	// precess 15
+    pinMode(relay3, OUTPUT);	  // precess 12
+    pinMode(relay4, OUTPUT);	  // precess 15
     pinMode(relay5, OUTPUT);
     pinMode(relay6, OUTPUT);
     pinMode(relay7, OUTPUT);
@@ -178,14 +179,14 @@ void setup() {
     digitalWrite(relay7, HIGH);
     digitalWrite(relay8, HIGH);
 
-    FastLED.addLeds<WS2812B, 2, RGB>(leds[0], 40);  		// precess 1
-    FastLED.addLeds<WS2812B, 3, RGB>(leds[1], 90);  		// Process 4  	// process 5 - oxidation ditch
+    FastLED.addLeds<WS2812B, 2, RGB>(leds[0], 40);  		    // precess 1
+    FastLED.addLeds<WS2812B, 3, RGB>(leds[1], 90);  		    // Process 4  	// process 5 - oxidation ditch
     FastLED.addLeds<WS2812B, 4, RGB>(leds[2], NUM_LEDS);  	// process 4  
     FastLED.addLeds<WS2812B, 5, RGB>(leds[3], NUM_LEDS);  	// process 4  	// precess 5
     FastLED.addLeds<WS2812B, 6, RGB>(leds[4], NUM_LEDS);  	// process 4  	// precess 5
     FastLED.addLeds<WS2812B, 7, RGB>(leds[5], NUM_LEDS);  	// process 11
     FastLED.addLeds<WS2812B, 8, RGB>(leds[6], NUM_LEDS);    // process 6  	// process 7
-    FastLED.addLeds<WS2812B, 9, RGB>(leds[7], NUM_LEDS);    // process 5	// process 13
+    FastLED.addLeds<WS2812B, 9, RGB>(leds[7], NUM_LEDS);    // process 5	  // process 13
     FastLED.addLeds<WS2812B, 10, RGB>(leds[8], NUM_LEDS);   // process 6  	// process 7
     FastLED.addLeds<WS2812B, 11, RGB>(leds[9], NUM_LEDS);   // process 6  	// process 7
 
@@ -207,17 +208,25 @@ void loop()
     {
         value = output.value;
         Serial.println(value); // to get the IR values
-        if(value == 41565 )
+        
+        if(value == 41565 )     // auto sequance botton pressed
         {
-            // auto sequance botton pressed
             manualOn = 0;
             processNow = 0;
+            programMode = 0;            
             AutoSequance();
-        }else if(value == 57885)
+            //seding value 4 to swich off the automode
+        }else if(value == 25245 )   // program mode button is pressed 
         {
-            // manual oparation button pressed
+            // programo mode is on
+            manualOn = 0;
+            processNow = 0;
+            programMode = 1;
+        }else if(value == 57885)     // manual oparation button pressed
+        {
             manualOn = 1;
             processNow = 0;
+            programMode = 0;
         }else if(value == 8925)   // << button
         {
             // manual oparation button pressed
@@ -241,6 +250,13 @@ void loop()
             if(manualOn == 1)
             {
                 process1();
+            }else if(programMode == 1)
+            {
+                // sending digial 1 to wifi and model to switch on blue light
+                digitalWrite(D4, LOW);  
+                digitalWrite(D3, LOW);
+                digitalWrite(D2, LOW);
+                digitalWrite(D1, HIGH);
             }    
         }else if(value == 43095)  //  2
         {
@@ -248,20 +264,41 @@ void loop()
             if(manualOn == 1)
             {
                 process2();
-            }    
+            }else if(programMode == 1)
+            {
+                // sending digial 2 to wifi and model to swich off blue light
+                digitalWrite(D4, LOW);  
+                digitalWrite(D3, LOW);
+                digitalWrite(D2, HIGH);
+                digitalWrite(D1, LOW);
+            }
         }else if(value == 36975)  //  3
         {
             // manual oparation button pressed
             if(manualOn == 1)
             {
                 process3();
-            }    
+            }else if(programMode == 1)
+            {
+                // sending digial 1 to wifi and model to switch on general lights
+                digitalWrite(D4, LOW);  
+                digitalWrite(D3, HIGH);
+                digitalWrite(D2, HIGH);
+                digitalWrite(D1, LOW);
+            }
         }else if(value == 26775)  //  4
         {
             // manual oparation button pressed
             if(manualOn == 1)
             {
                 process4();
+            }else if(programMode == 1)
+            {
+                // sending digial 1 to wifi and model to switch off general lights
+                digitalWrite(D4, HIGH);  
+                digitalWrite(D3, LOW);
+                digitalWrite(D2, LOW);
+                digitalWrite(D1, LOW);
             }    
         }else if(value == 39015)  //  5
         {
@@ -593,6 +630,7 @@ int process3()
     digitalWrite(D3, LOW);
     digitalWrite(D2, HIGH);
     digitalWrite(D1, HIGH);
+    delay(2000);
     
     Serial.println("Process 3 starts");
     digitalWrite(relay2, LOW);
@@ -655,6 +693,7 @@ int process5()
     digitalWrite(D3, HIGH);
     digitalWrite(D2, LOW);
     digitalWrite(D1, HIGH);
+    delay(2000);
 
     Serial.println("Process 16 starts");
     Wire.beginTransmission(9);    // sending value to arduino 2
@@ -827,6 +866,7 @@ int process7()
     digitalWrite(D3, HIGH);
     digitalWrite(D2, HIGH);
     digitalWrite(D1, HIGH);
+    delay(2000);
     
     Wire.beginTransmission(9);    // sending value to arduino 2
     Wire.write(2);                // sending value to arduino 2
@@ -1027,6 +1067,7 @@ int process9()
     digitalWrite(D3, LOW);
     digitalWrite(D2, LOW);
     digitalWrite(D1, HIGH);
+    delay(2000);
 
     // Sending input to 
     Wire.beginTransmission(9);    // sending value to arduino 2
@@ -1058,6 +1099,7 @@ int process10()
     digitalWrite(D3, LOW);
     digitalWrite(D2, HIGH);
     digitalWrite(D1, LOW);
+    delay(2000);
 
     // sending signal to slave ardino via I2C.
     Wire.beginTransmission(9);    // sending value to arduino 2
@@ -1108,6 +1150,7 @@ int process12()
     digitalWrite(D3, HIGH);
     digitalWrite(D2, LOW);
     digitalWrite(D1, LOW);
+    delay(2000);
 
     Serial.println("Process 12 starts");
     digitalWrite(relay3, LOW);
@@ -1189,6 +1232,7 @@ int process15()
     digitalWrite(D3, HIGH);
     digitalWrite(D2, HIGH);
     digitalWrite(D1, HIGH);
+    delay(2000);
 
     // sending signal to slave ardino via I2C.
     Serial.println("Process 15 starts");

@@ -40,6 +40,7 @@ int D4 = 2;
 
 int inputFromMain = 0;
 
+int autoMode();
 
 void setup() {
   // initialize the serial port:
@@ -93,8 +94,25 @@ void loop() {
 
   inputFromMain = digitalRead(D4)*8 + digitalRead(D3)*4 + digitalRead(D2)*2 + digitalRead(D1); 
   Serial.println(inputFromMain);
-
-    if (inputFromMain == 3)
+  
+    if(inputFromMain == 0)
+    {
+        //digitalWrite(BlueLight, HIGH);      // blue light off
+        //digitalWrite(GeneralLights, HIGH);  // general lights off 
+        digitalWrite(process03, LOW);       // process 3 off
+        digitalWrite(process05, HIGH);      // process 5 relay off
+        digitalWrite(process07, HIGH);      // process 7 relay off
+        digitalWrite(process09, LOW);       // process 9 off
+        digitalWrite(process10, LOW);       // process 10 off
+        digitalWrite(process12, LOW);       // process 12 off
+        digitalWrite(process15, LOW);       // process 15 off
+    }else if(inputFromMain == 1)
+    {
+        digitalWrite(BlueLight, LOW);       // blue light on
+    }else if(inputFromMain == 2)
+    {
+        digitalWrite(BlueLight, HIGH);       // blue light off
+    }else if (inputFromMain == 3)
     {
         digitalWrite(GeneralLights, HIGH);  // general lights off 
         digitalWrite(process03, HIGH);      // process 3 on
@@ -113,6 +131,9 @@ void loop() {
         digitalWrite(process09, LOW);       // process 9 off
         digitalWrite(process10, LOW);       // process 10 off
         digitalWrite(process12, LOW);       // process 12 off
+    }else if (inputFromMain == 6)
+    {
+        digitalWrite(GeneralLights, LOW);  // general lights ON
     }else if (inputFromMain == 7)
     {
         digitalWrite(GeneralLights, HIGH);  // general lights off 
@@ -123,6 +144,10 @@ void loop() {
         digitalWrite(process10, LOW);      // process 10 off
         digitalWrite(process12, LOW);       // process 12 off
         digitalWrite(process15, LOW);       // process 15 off
+    }else if (inputFromMain == 8)
+    {
+        digitalWrite(GeneralLights, HIGH);  // general lights off
+    
     }else if (inputFromMain == 9)
     {
         digitalWrite(GeneralLights, HIGH);  // general lights off 
