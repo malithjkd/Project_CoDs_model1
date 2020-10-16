@@ -51,7 +51,7 @@
  *  1  | 0 0 0 1 | Blue light on                  |           | Program --> button1
  *  2  | 0 0 1 0 | Blue light off                 |           | Program --> button2
  *  3  | 0 0 1 1 | Preliminary tretment building  | process3  | Manual --> button 3
- *  4  | 0 1 0 0 | Auro process                   | all proc  | Auto process  
+ *  4  | 0 1 0 0 | 
  *  5  | 0 1 0 1 | Oxidation ditch                | process5  | Manual --> button 5
  *  6  | 0 1 1 0 | Genereal light on              |           | Program --> button3
  *  7  | 0 1 1 1 | Sedimentation tank             | process7  | Manual --> button 7
@@ -203,26 +203,27 @@ void setup() {
 }
 
 void loop()
-{    
+{
+
     if (receiver.decode(&output)) 
     {
         value = output.value;
         Serial.println(value); // to get the IR values
         
-        if(value == 41565 )     // auto sequance botton pressed
+        if(value == 25245 )     // auto sequance botton pressed
         {
             manualOn = 0;
             processNow = 0;
             programMode = 0;            
             AutoSequance();
             //seding value 4 to swich off the automode
-        }else if(value == 25245 )   // program mode button is pressed 
+        }else if(value == 57885 )   // program mode button is pressed 
         {
             // programo mode is on
             manualOn = 0;
             processNow = 0;
             programMode = 1;
-        }else if(value == 57885)     // manual oparation button pressed
+        }else if(value == 41565)     // manual oparation button pressed
         {
             manualOn = 1;
             processNow = 0;
@@ -427,6 +428,8 @@ void loop()
         delay(100);
         
     }//end of if function for remote operation
+
+    
     
 }//end of loop
 
@@ -630,7 +633,7 @@ int process3()
     digitalWrite(D3, LOW);
     digitalWrite(D2, HIGH);
     digitalWrite(D1, HIGH);
-    delay(2000);
+    delay(3000);
     
     Serial.println("Process 3 starts");
     digitalWrite(relay2, LOW);
@@ -693,13 +696,22 @@ int process5()
     digitalWrite(D3, HIGH);
     digitalWrite(D2, LOW);
     digitalWrite(D1, HIGH);
-    delay(2000);
+    delay(3000);
 
+    
     Serial.println("Process 16 starts");
     Wire.beginTransmission(9);    // sending value to arduino 2
     Wire.write(9);                // sending value to arduino 2
     Wire.endTransmission();       // sending value to arduino 2
     delay(100);
+
+    leds[1][48] = CRGB(150,0,0);
+    leds[3][51] = CRGB(150,0,0);
+    leds[4][25] = CRGB(150,0,0);
+    leds[7][10] = CRGB(150,0,0);
+    leds[7][11] = CRGB(150,0,0);
+    FastLED.show();
+    delay(125);
     
     for(i=0;i<20;i++)
     {
@@ -866,160 +878,217 @@ int process7()
     digitalWrite(D3, HIGH);
     digitalWrite(D2, HIGH);
     digitalWrite(D1, HIGH);
-    delay(2000);
+    delay(3000);
     
     Wire.beginTransmission(9);    // sending value to arduino 2
     Wire.write(2);                // sending value to arduino 2
     delay(50);
     Wire.endTransmission();       // sending value to arduino 2  
     delay(50);
-    
-    for(i=23;i<=52;i++)
+
+    for(i=0;i<=29;i++)
     {
-        j = i;
-        p = i-17;
-        v = i-20; 
-        leds[6][j] = CRGB(10,10,100);
-        leds[8][v] = CRGB(10,10,100);
-        leds[9][p] = CRGB(10,10,100);
+        // switching on
+        // first cycle
+        leds[6][52-i] = CRGB(10,10,100);
+        leds[9][i+6] = CRGB(10,10,100);
+        leds[8][32-i] = CRGB(10,10,100);
         FastLED.show();
         delay(20);
 
-        k = i+7;
-        w = v+7;
-        r = p+7;
-        if(k<52)
+        // second cycle
+        if(i<=22)
         {
-            l=k;
-        }else
+            leds[6][45-i] = CRGB(10,10,100);  
+        }else if(i>22)
         {
-            l = k-29;  
+            leds[6][75-i] = CRGB(10,10,100);
         }
-        
-        if(w<32)
-        {
-           y=w;
-        }else
-        {
-            y = w-29;  
-        }
-        if(r<34)
-        {
-            s = r;
-        }else
-        {
-            s = r-28;
-        }
-        leds[6][l] = CRGB(10,10,100);
-        leds[8][y] = CRGB(10,10,100);
-        leds[9][s] = CRGB(10,10,100);
-        FastLED.show();
-        delay(20);
 
-        k = i+14;
-        w = v+14;
-        r = p+14;
-        if(k<52)
+        if(i<=21)
         {
-            m=k;
-        }else
+            leds[9][i+13] = CRGB(10,10,100);
+        } else if (i>21)
         {
-            m = k-29;  
+            leds[9][i-16] = CRGB(10,10,100);
         }
-        if(w<32)
-        {
-            z=w;
-        }else
-        {
-            z = w-29;  
-        }
-        if(r<34)
-        {
-            t=r;
-        }else
-        {
-            t = r-28;
-        }
-        leds[6][m] = CRGB(10,10,100);
-        leds[8][z] = CRGB(10,10,100);
-        leds[9][t] = CRGB(10,10,100);
-        FastLED.show();
-        delay(20);
 
-        k = i+22;
-        w = v+22;
-        r = p+21;
-        if(k<52)
+        if(i<=22)
         {
-            n=k;
-        }else
+            leds[8][25-i] = CRGB(10,10,100); 
+        }else if(i>22)
         {
-            n = k-29;  
+            leds[8][57-i] = CRGB(10,10,100);
         }
-        if(w<32)
-        {
-            a=w;
-        }else
-        {
-            a = w-29;  
-        }
-        if(r<34)
-        {
-            u = r;
-        }else
-        {
-            u = r - 28;  
-        }
-        leds[6][n] = CRGB(10,10,100);
-        leds[8][a] = CRGB(10,10,100);
-        leds[9][u] = CRGB(10,10,100);
-        FastLED.show();
-        delay(20);
-
-        // swiching off
-        leds[6][j-1] = CRGB(0,0,0);
-        leds[8][v-1] = CRGB(0,0,0);
-        leds[9][p-1] = CRGB(0,0,0);
-        FastLED.show();
-        delay(20);
-        leds[6][l-1] = CRGB(0,0,0);
-        leds[8][y-1] = CRGB(0,0,0);
-        leds[9][s-1] = CRGB(0,0,0);
-        FastLED.show();
-        delay(20);
-        leds[6][m-1] = CRGB(0,0,0);
-        leds[8][z-1] = CRGB(0,0,0);
-        leds[9][t-1] = CRGB(0,0,0);
-        FastLED.show();
-        delay(20);
-        leds[6][n-1] = CRGB(0,0,0);
-        leds[8][a-1] = CRGB(0,0,0);
-        leds[9][u-1] = CRGB(0,0,0);
         FastLED.show();
         delay(20);
         
-    }
-    leds[6][52] = CRGB(0,0,0);
-    leds[8][32] = CRGB(0,0,0);
-    leds[9][34] = CRGB(0,0,0);
+        //thired cycle
+        if(i<=15)
+        {
+            leds[6][38-i] = CRGB(10,10,100);
+        }else if(i>15)
+        {
+            leds[6][68-i] = CRGB(10,10,100);
+        }
+
+        if(i<=14)
+        {
+            leds[9][i+20] = CRGB(10,10,100);
+        }else if (i>14)
+        {
+            leds[9][i-9] = CRGB(10,10,100);
+        }
+
+        if(i<=15)
+        {
+            leds[8][18-i] = CRGB(10,10,100); 
+        }else if(i>15)
+        {
+            leds[8][48-i] = CRGB(10,10,100);
+        }
+        FastLED.show();
+        delay(20);
+
+        //forth cycle
+        if(i<=8)
+        {
+            leds[6][31-i] = CRGB(10,10,100);
+        }else if(i>8)
+        {
+            leds[6][61-i] = CRGB(10,10,100);
+        }
+        if(i<=7)
+        {
+            leds[9][i+27] = CRGB(10,10,100);
+        }else if(i>7)
+        {
+            leds[9][i-2] = CRGB(10,10,100);
+        }
+        if(i<=8)
+        {
+            leds[8][11-i] = CRGB(10,10,100); 
+        }else if(i>8)
+        {
+            leds[8][41-i] = CRGB(10,10,100);
+        }
+        FastLED.show();
+        delay(20);
+        
+        // switching off
+        // first cycle
+        leds[6][53-i] = CRGB(0,0,0);
+        leds[9][i+5] = CRGB(0,0,0);
+        leds[8][33-i] = CRGB(0,0,0);
+        FastLED.show();
+        delay(20);
+
+        // second cycle
+        if(i<=22)
+        {
+            leds[6][46-i] = CRGB(0,0,0);
+        }else if(i>22)
+        {
+            leds[6][76-i] = CRGB(0,0,0);
+        }
+        
+        if(i<=21)
+        {
+            leds[9][i+12] = CRGB(0,0,0);
+        } else if (i>21)
+        {
+            leds[9][i-17] = CRGB(0,0,0);
+        }
+
+        if(i<=22)
+        {
+            leds[8][26-i] = CRGB(0,0,0); 
+        }else if(i>22)
+        {
+            leds[8][58-i] = CRGB(0,0,0);
+        }
+        FastLED.show();
+        delay(20); 
+
+        // Third cycle 
+        if(i<=15)
+        {
+            leds[6][39-i] = CRGB(0,0,0);
+        }else if(i>15)
+        {
+            leds[6][69-i] = CRGB(0,0,0);
+        }
+
+        if(i<=14)
+        {
+            leds[9][i+19] = CRGB(0,0,0);
+        }else if (i>14)
+        {
+            leds[9][i-10] = CRGB(0,0,0);
+        }
+
+        if(i<=15)
+        {
+            leds[8][19-i] = CRGB(0,0,0); 
+        }else if(i>15)
+        {
+            leds[8][49-i] = CRGB(0,0,0);
+        }
+        FastLED.show();
+        delay(20);
+        
+
+        // forth cycle
+        if(i<=8)
+        {
+            leds[6][32-i] = CRGB(0,0,0);
+        }else if (i>8)
+        {
+            leds[6][62-i] = CRGB(0,0,0);
+        }
+
+        if(i<=7)
+        {
+            leds[9][i+26] = CRGB(0,0,0);
+        }else if (i>7)
+        {
+            leds[9][i-3] = CRGB(0,0,0);
+        }
+
+        if(i<=8)
+        {
+            leds[8][12-i] = CRGB(0,0,0); 
+        }else if(i>8)
+        {
+            leds[8][42-i] = CRGB(0,0,0);
+        }
+        FastLED.show();
+        delay(20);
+    }// end of for loop 
+    leds[6][23] = CRGB(0,0,0);
+    leds[8][3] = CRGB(0,0,0);
     FastLED.show();
     delay(20);
-    leds[6][30] = CRGB(0,0,0);
-    leds[8][10] = CRGB(0,0,0);
-    leds[9][14] = CRGB(0,0,0);
+
+    leds[6][46] = CRGB(0,0,0);
+    leds[9][13] = CRGB(0,0,0);
+    leds[8][28] = CRGB(0,0,0);
     FastLED.show();
     delay(20);
-    leds[6][37] = CRGB(0,0,0);
-    leds[8][17] = CRGB(0,0,0);
-    leds[9][21] = CRGB(0,0,0);
+
+    leds[6][39] = CRGB(0,0,0);
+    leds[9][20] = CRGB(0,0,0);
+    leds[8][19] = CRGB(0,0,0);
     FastLED.show();
     delay(20);
-    leds[6][45] = CRGB(0,0,0);
-    leds[8][25] = CRGB(0,0,0);
-    leds[9][28] = CRGB(0,0,0);
+
+    leds[6][32] = CRGB(0,0,0);
+    leds[9][27] = CRGB(0,0,0);
+    leds[8][12] = CRGB(0,0,0);
     FastLED.show();
     delay(20);
     
+   
     Serial.println("Process 7 stps in master ");
     // waiting for slave to finish the pocess
     for(i=0;i<30;i++)
@@ -1067,7 +1136,7 @@ int process9()
     digitalWrite(D3, LOW);
     digitalWrite(D2, LOW);
     digitalWrite(D1, HIGH);
-    delay(2000);
+    delay(3000);
 
     // Sending input to 
     Wire.beginTransmission(9);    // sending value to arduino 2
@@ -1099,7 +1168,7 @@ int process10()
     digitalWrite(D3, LOW);
     digitalWrite(D2, HIGH);
     digitalWrite(D1, LOW);
-    delay(2000);
+    delay(3000);
 
     // sending signal to slave ardino via I2C.
     Wire.beginTransmission(9);    // sending value to arduino 2
@@ -1150,7 +1219,7 @@ int process12()
     digitalWrite(D3, HIGH);
     digitalWrite(D2, LOW);
     digitalWrite(D1, LOW);
-    delay(2000);
+    delay(3000);
 
     Serial.println("Process 12 starts");
     digitalWrite(relay3, LOW);
@@ -1232,7 +1301,7 @@ int process15()
     digitalWrite(D3, HIGH);
     digitalWrite(D2, HIGH);
     digitalWrite(D1, HIGH);
-    delay(2000);
+    delay(3000);
 
     // sending signal to slave ardino via I2C.
     Serial.println("Process 15 starts");
