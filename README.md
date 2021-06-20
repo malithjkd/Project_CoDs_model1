@@ -27,3 +27,7 @@ Also this servers as projectlog file
 	Include that libry to the ArduinoIDE from Sketch-->Include Library-->Add .ZIP Library
 5. upload esp8266_receiver.ino and esp8266_transmitter.ino to two divices.
 6. Serial read the receiver module from arduinoIDE.
+
+20.03.2021
+
+7. Physical system faliure due to 12V input to 5V leds. Fixed on site.
